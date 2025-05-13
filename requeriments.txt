@@ -1,0 +1,2 @@
+npm install fs-extra
+npm install @types/fs-extra --save-dev

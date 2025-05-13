@@ -1,0 +1,599 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Urbanist', sans-serif;
+    
+}
+
+body {
+    margin: 0;
+    padding: 20px; /* Margem de 20px ao redor de toda a tela */
+    box-sizing: border-box; /* Garante que o padding/margin seja aplicado corretamente */
+}
+
+.container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3b7e48;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 50px; 
+    padding: 15px 25px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); 
+    margin: 20px auto;
+    margin-bottom: 50px;
+    padding-left: 3%;
+    width: 60%; 
+}
+
+.search-bar > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.botao {
+    background-color: #E19355;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.botao img {
+    width: 24px; 
+    height: 24px;
+}
+.accommodation-section {
+    margin-bottom: 40px;
+}
+
+.accommodation-section h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.accommodation-section p {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.accommodations {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.accommodation-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out;
+}
+
+.referencia .distancia .tipo .avaliacao {
+    position: relative;
+    display: inline-block;
+}
+
+.referencia {
+    align-items: center;  
+    border-radius: 40px / 50%;
+    width: 140px;
+    height: 80px;
+}
+
+.referencia a {
+    display: flex; /* Garante que o link ocupe toda a área do botão */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Remove o sublinhado */
+    color: black;
+    width: 100%; /* Faz o link preencher a referência */
+    height: 100%; /* Faz o link preencher a referência */
+}
+
+.referencia:hover {
+    background-color: rgba(90, 145, 124, 0.7);
+    align-items: center;  
+    opacity: 0.7;
+    border-radius: 40px / 50%;
+    width: 140px;
+    height: 80px;
+    transition: all 0.7s ease; 
+}
+
+/* Estilo da sobreposição */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Escurece o fundo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.3s ease;
+}
+
+/* Estilo do conteúdo da sobreposição */
+.overlay-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px; /* Limita a largura máxima */
+    padding: 20px; /* Margem interna para o conteúdo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espaçamento entre elementos */
+    border-radius: 40px;
+}
+
+/* Estilo da imagem dentro da sobreposição */
+.overlay-content img {
+    width: 100%; /* Faz a imagem ocupar toda a largura disponível */
+    height: auto;
+    border-radius: 35px;
+    margin-bottom: -20px; /* Espaçamento entre a imagem e o botão */
+}
+
+/* Botão dentro da sobreposição */
+.overlay-content .close-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #E19355;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 35px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.overlay-content .close-btn:hover {
+    background-color: #b4693d;
+}
+
+.distancia {
+    align-items: center;
+    border-radius: 35% / 55%;
+    width: 140px;
+    height: 80px;
+}
+
+.distancia a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Remove o sublinhado */
+    color: black;
+    width: 100%;
+    height: 100%;
+}
+
+.distancia:hover {
+    background-color: rgba(90, 145, 124, 0.7);
+    align-items: center;
+    opacity: 0.7;
+    border-radius: 35% / 55%;
+    width: 140px;
+    height: 80px;
+    transition: all 0.7s ease;
+}
+
+/* Slider Container */
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    margin: 20px auto;
+}
+
+/* Estilo do Slider */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 6px;
+    background: linear-gradient(to right, #E19355 39%, #dfdfdf 39%);
+    border-radius: 5px;
+    outline: none;
+    margin: 0 10px;
+    position: relative;
+}
+
+/* Estilo do bullet (thumb) */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #E19355;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #E19355;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo geral do overlay */
+.overlay-content h2 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+#slider-value {
+    font-size: 16px;
+    color: #333;
+}
+
+.tipo {
+    align-items: center;  
+    border-radius: 22% / 55%;
+    width: 230px;
+    height: 80px;
+}
+
+.tipo:hover {
+    background-color: rgba(90, 145, 124, 0.7);
+    align-items: center;  
+    opacity: 0.7;
+    border-radius: 22% / 55%;
+    width: 230px;
+    height: 80px;
+    transition: all 0.7s ease; 
+}
+
+.avaliacao {
+    align-items: center;  
+    border-radius: 35% / 55%;
+    width: 140px;
+    height: 80px;
+}
+
+.avaliacao:hover {
+    background-color: rgba(90, 145, 124, 0.7);
+    align-items: center;  
+    opacity: 0.7;
+    border-radius: 35% / 55%;
+    width: 140px;
+    height: 80px;
+    transition: all 0.7s ease; 
+}
+
+.image-info {
+    position: relative;
+    display: inline-block;
+    background-color: #d9d9d9;
+}
+
+.image-info img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: opacity 0.3s ease; 
+}
+
+.image-info:hover img {
+    opacity: 0.26; 
+}
+
+
+.image-info::after {
+    content: url("../images/lupa-preta.png"); /* Caminho da imagem da lupa */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centraliza a lupa */
+    opacity: 0; /* Inicialmente invisível */
+    transition: opacity 0.8s ease; /* Suaviza a aparição da lupa */
+}
+
+.image-info:hover::after {
+    opacity: 1; /* Torna a lupa visível ao passar o mouse */
+}
+
+
+.accommodation-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.accommodation-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.accommodation-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accommodation-details {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.price {
+    font-weight: bold;
+    color: #3b7e48;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.price span {
+    font-size: 12px;
+    color: #777;
+}
+
+.rating {
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.perfil {
+    position: absolute; /* Para poder controlar a posição */
+    top: 40px; /* Posiciona no topo */
+    right: 40px; /* Alinha à direita */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 2; /* Coloca acima da navbar */
+}
+
+.perfil-foto img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #fbb034;
+    object-fit: cover;
+}
+
+.perfil-infos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Ajusta o alinhamento interno para o lado esquerdo */
+}
+
+.perfil-infos h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.perfil-infos p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* #################### */
+
+/* Estilo da overlay e do conteúdo do perfil */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+/* Container geral do perfil */
+.perfil-editar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.perfil-nome {
+    padding-top: 30px;
+}
+
+/* Foto do perfil (à esquerda) */
+.perfil-editar img:first-child {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 50px;
+}
+
+
+
+/* Botão de sair (canto superior direito) */
+.perfil-editar img:last-child {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-10px, 10px);
+    width: 45px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.botao-sair {
+    padding-left: 200px;
+}
+
+#divide {
+    height: 3px;
+    width: 399px;
+}
+
+/* Bio (descrição) */
+.bio {
+    font-size: 14px;
+    color: #666;
+    text-align: justify;
+    margin: 10px 20px;
+}
+
+/* Divisores (linhas verdes) */
+.divisao img {
+    width: 100%;
+    height: 2px;
+    background-color: #00c853;
+    margin: 10px 0;
+}
+
+/* Seções de botões */
+.botoes-superior, .botoes-inferior {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+
+/* BOTOES SUPERIORES */
+.botoes-superior {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    text-align: center;
+}
+
+.botao-superior {
+    font-size: 16px;
+}
+
+.botao-superior p:first-child {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.botao-superior p:last-child {
+    font-weight: normal;
+    color: #666;
+}
+
+.botoes-inferior {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    text-align: left;
+    width: 80%;
+    max-width: 600px;
+}
+
+.informacoes {
+    font-size: 16px;
+}
+
+.informacoes span {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.informacoes p {
+    font-weight: normal;
+    color: #666;
+    margin: 0;
+}
+
+
+/* ################# */
+
+
+.perfil-imagem {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid #f1f1f1;
+    object-fit: cover;
+}
+
+.perfil-nome {
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    margin-top: 32px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.botao-sair {
+    position: absolute;
+    top: 10px;
+    left: 400px;
+    padding: 20px;
+}
+
+

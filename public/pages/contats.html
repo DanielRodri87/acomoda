@@ -9,60 +9,63 @@
 </head>
 <body>
     <div id="navbar"></div>
-    <div class="caixa_geral">
-        <div class="container">
-            <img src="../assets/images/contats/contats_back_image.png" alt="Imagem de fundo" class="background">
-            <div class="overlay"></div>
-    
-            <div class="card_esquerda">
-                <h1>Contatos</h1>
-    
-                <span>Formas de contato para causalidades<br>tecnicas na aplicação ou na forma de uso</span>
-                <div class="inputs">
-                    <span>Feedback</span>
-                    <div class="input">
-                        <input type="text" placeholder="Nome">
-                    </div>
-                    <div class="input">
-                        <input type="text" placeholder="E-mail">
-                    </div>
-                    <div class="input">
-                        <input type="text" placeholder="Mensagem">
-                    </div>
-    
-                    <button><b>Enviar</b></button>
-    
-                </div>
-            </div>
-            <div class="container2">
-                <div class="card_direita">
-                    <h3>Informações</h3>
-                    <div class="infos">
-                        <div class="linha"></div>
-                        <div class="info-item">
-                            <img src="../assets/images/contats/Celular.png" alt="Telefone">
-                            <span>(xx)xxxx-xxxx</span>
-                        </div>
-                        <div class="info-item">
-                            <img src="../assets/images/contats/Insta.png" alt="Instagram">
-                            <span>@acomoda</span>
-                        </div>
-                        <div class="info-item">
-                            <img src="../assets/images/contats/contats_email.png" alt="Email">
-                            <span>acomoda@gmail.com</span>
-                        </div>
-                        <div class="info-item" id="horario">
-                            <img src="../assets/images/contats/relogio.png" alt="Horário">
-                            <span>08:00 - 18:00</span>
-                        </div>
-                    </div>
-            </div>
 
-            </div>
-            </div>
+    <section class="contato-container">
+      <div class="info-box">
+        <h2>Informações</h2>
+  
+        <div class="info-item">
+          <span class="info-label">Telefone</span>
+          <div class="info-content">
+            <img src="../assets/images/contats/Phone.png" alt="Ícone Telefone" />
+            <span class="info-value">(89) 5291-8810</span>
+          </div>
         </div>
-    </div>
-    <script src="../assets/js/main.js"></script>
+  
+        <div class="info-item">
+          <span class="info-label">E-mail</span>
+          <div class="info-content">
+            <img src="../assets/images/contats/E-mail.png" alt="Ícone E-mail" />
+            <span class="info-value">acomoda.emp@gmail.com</span>
+          </div>
+        </div>
+  
+        <div class="info-item">
+          <span class="info-label">Instagram</span>
+          <div class="info-content">
+            <img src="../assets/images/contats/Instagram.png" alt="Ícone Instagram" />
+            <span class="info-value">@acomoda</span>
+          </div>
+        </div>
+  
+        <div class="info-item">
+          <span class="info-label">Horário de Funcionamento</span>
+          <div class="info-content">
+            <img src="../assets/images/contats/Horario.png" alt="Ícone Horário" />
+            <span class="info-value">08:00 - 18:00</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="form-box">
+        <div class="form-overlay">
+            <div class="background-image">
+                <img src="../assets/images/contats/back_contats.png" alt="Background Contatos" />
+            </div>
+            <h1>Contatos</h1>
+          <p>Entre em contato com a gente e contribua para que o Acomoda seja cada vez melhor e confortável</p>
+          <form>
+            <label>Feedback</label>
+            <input type="text" placeholder="Nome" required />
+            <input type="email" placeholder="E-mail" required />
+            <input placeholder="Mensagem" required></input>
+            <button type="submit">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </section>
 
-</body>
-</html>
+
+    <script src="../assets/js/main.js"></script>
+  </body>
+  </html>

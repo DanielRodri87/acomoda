@@ -1,2 +1,13 @@
 npm install fs-extra
 npm install @types/fs-extra --save-dev
+
+sudo -i -u postgres
+psql
+\password postgres
+
+sudo -i -u postgres
+createuser --interactive
+createdb nomedobanco
+
+user: postgre
+senha: acomoda2025

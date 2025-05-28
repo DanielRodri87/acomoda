@@ -38,12 +38,12 @@ header {
     justify-content: space-between;
     background-color: white;
     border-radius: 50px; 
-    padding: 15px 25px;
+    padding: 15px 25px ;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); 
     margin: 20px auto;
     margin-bottom: 50px;
     padding-left: 3%;
-    width: 60%; 
+    width: 65%; 
 }
 
 .search-bar > div {
@@ -123,6 +123,8 @@ header {
     color: black;
     width: 100%; /* Faz o link preencher a referência */
     height: 100%; /* Faz o link preencher a referência */
+    font-size: 150%;
+    font-family: arial sains-serif;
 }
 
 .referencia:hover {
@@ -216,6 +218,8 @@ header {
     color: black;
     width: 100%;
     height: 100%;
+    font-size: 150%;
+    font-family: arial,sans-serif;
 }
 
 .distancia:hover {
@@ -283,39 +287,67 @@ input[type="range"]::-moz-range-thumb {
     color: #333;
 }
 
+
 .tipo {
-    align-items: center;  
-    border-radius: 22% / 55%;
-    width: 230px;
+    align-items: center;
+    border-radius: 40px / 50%; /* Igual ao .referencia */
+    width: 140px;
     height: 80px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.7s ease;
+}
+
+.tipo a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+    font-family: Arial, sans-serif;
 }
 
 .tipo:hover {
     background-color: rgba(90, 145, 124, 0.7);
-    align-items: center;  
     opacity: 0.7;
-    border-radius: 22% / 55%;
-    width: 230px;
-    height: 80px;
-    transition: all 0.7s ease; 
 }
 
+
 .avaliacao {
-    align-items: center;  
-    border-radius: 35% / 55%;
+    align-items: center;
+    border-radius: 40px / 50%; /* Igual ao .referencia */
     width: 140px;
     height: 80px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.7s ease;
+}
+
+.avaliacao a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+    font-family: Arial, sans-serif;
 }
 
 .avaliacao:hover {
     background-color: rgba(90, 145, 124, 0.7);
-    align-items: center;  
     opacity: 0.7;
-    border-radius: 35% / 55%;
-    width: 140px;
-    height: 80px;
-    transition: all 0.7s ease; 
 }
+
+
 
 .image-info {
     position: relative;

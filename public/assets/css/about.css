@@ -132,7 +132,7 @@ html, body {
 .footer {
     width: 100%;
     height: 40em;
-    background-image: url('../images/background_about.png');
+    background-image: url('../images/about/Group 58.png');
     background-size: cover;
     background-position: center;
     opacity: 0.95;
@@ -143,14 +143,14 @@ html, body {
     flex-wrap: wrap;
     box-sizing: border-box;
     transition: all 0.5s ease;
-    margin-top: 8%;
+    margin-top: 6%;
     padding-top: 5%;
 }
 .footer:hover {
     margin-top: 0%;
     width: 100%;
     height: 40em;
-    background-image: url('../images/background_about.png');
+    background-image: url('../images/about/Group 58.png');
     opacity: 0.9;
     color: #ffffff;
 }

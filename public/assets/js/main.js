@@ -43,3 +43,29 @@ if (form) {
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const user = loginForm.querySelector('#user').value;
+      const senha = loginForm.querySelector('#senha').value;
+      try {
+        const res = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user, senha })
+        });
+        if (res.ok) {
+          alert('Login realizado com sucesso!');
+          window.location.href = 'pages/main_screen.html';
+        } else {
+          alert('Usuário ou senha inválidos!');
+        }
+      } catch (err) {
+        alert('Erro de conexão com o servidor.');
+      }
+    });
+  }
+});

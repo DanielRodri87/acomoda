@@ -11,6 +11,8 @@ export class UserService {
   ) {}
 
   async create(userData: Partial<User>): Promise<User> {
+    // Se receber uma imagem em base64, salva diretamente no banco
+    // O TypeORM vai cuidar da conversão para o formato adequado do PostgreSQL
     const user = this.userRepository.create(userData);
     return this.userRepository.save(user);
   }

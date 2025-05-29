@@ -20,14 +20,14 @@
         <div class="info_dir">
             <div class="card_login">
                 <h3>Seja bem-vindo ao Acomoda!</h3>
-                <form>
-                    <label for="user"> <img src="assets/images/index/User_icon.png" alt="user_icon" id="user"> User</label>
+                <form id="loginForm">
+                    <label for="user">User</label>
                     <input type="text" id="user" placeholder="Digite seu e-mail aqui">
     
-                    <label for="senha"><img src="assets/images/index/Senha_icon.png" alt="Senha_icon" id="pass"> Senha</label>
+                    <label for="senha">Senha</label>
                     <input type="password" id="senha" placeholder="Digite sua senha aqui">
     
-                    <button type="button" onclick="window.location.href='pages/main_screen.html'">Login</button>
+                    <button type="submit">Login</button>
                     <a href="pages/password.html">Esqueceu sua senha?</a>
                     <p>Não possui cadastro? <a href="pages/register.html">Cadastre-se</a></p>
                 </form>
@@ -35,6 +35,7 @@
         </div>
     </div>
     <!-- Script para carregar o conteúdo da navbar -->
+    <script src="/assets/js/database.js"></script>
     <script src="/assets/js/main.js"></script>
 </body>
-</html> 
+</html>

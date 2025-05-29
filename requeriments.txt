@@ -1,2 +1,23 @@
+1. Instalar as dependências
+
 npm install fs-extra
 npm install @types/fs-extra --save-dev
+
+2. Instalar e configurar o PostGreSQL
+
+sudo -i -u postgres
+psql
+\password postgres
+
+3. Comandos do PostGreSQL e dados adicionais
+
+sudo -i -u postgres
+createuser --interactive
+createdb nomedobanco
+
+user: postgre
+senha: acomoda2025
+
+4. Outros comandos
+
+fuser -k 3000/tcp

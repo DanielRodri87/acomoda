@@ -6,8 +6,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Configurar pasta de arquivos estáticos
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  // Atualizar o caminho para usar __dirname corretamente
+  const publicPath = join(__dirname, '../..', 'public');
+  app.useStaticAssets(publicPath);
 
   // Habilitar CORS para permitir requisições do frontend
   app.enableCors({

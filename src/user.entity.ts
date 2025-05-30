@@ -22,4 +22,7 @@ export class User {
 
   @Column()
   senha: string;
+
+  @Column({ nullable: true })
+  imagem: string;
 }

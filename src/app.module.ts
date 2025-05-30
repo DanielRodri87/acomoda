@@ -16,7 +16,7 @@ import { AuthController } from './auth.controller';
       port: 5432,
       username: 'postgres',
       password: 'acomoda2025',
-      database: 'usuarios',
+      database: 'bancodados',  // nome atualizado
       autoLoadEntities: true,
       synchronize: true,
     }),

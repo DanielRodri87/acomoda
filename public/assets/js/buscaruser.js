@@ -40,6 +40,12 @@ function updateUserInterface(user) {
         document.getElementById('user-email').textContent = user.email || "email@exemplo.com";
     }
     
+    // Elemento do nome completo na página de perfil do locador
+    if (document.getElementById('user-full-name')) {
+        document.getElementById('user-full-name').textContent = 
+            (user.primeiro_nome + " " + (user.segundo_nome || "")).trim() || "Nome do Usuário";
+    }
+    
     // Elementos no overlay de perfil
     if (document.getElementById('overlay-full-name')) {
         document.getElementById('overlay-full-name').textContent = 
@@ -54,6 +60,9 @@ function updateUserInterface(user) {
     }
     if (document.getElementById('info-email')) {
         document.getElementById('info-email').textContent = user.email || "Não informado";
+    }
+    if (document.getElementById('info-cpf')) {
+        document.getElementById('info-cpf').textContent = user.cpf || "Não informado";
     }
     
     // Atualizar imagem do perfil se disponível

@@ -292,7 +292,7 @@
     margin-top: 1.5rem;
   }
 
-  .imovel-buttons button {
+  .imovel-buttons a {
     flex: 1;
     padding: 0.8rem;
     font-size: 1rem;
@@ -305,7 +305,7 @@
     transition: background-color 0.3s;
   }
 
-  .imovel-buttons button:hover {
+  .imovel-buttons a:hover {
     background-color: #d9eae0;
   }
 

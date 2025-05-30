@@ -184,15 +184,13 @@
             <input type="text" id="nome" name="nome" required placeholder="Ex: Apartamento 302 Residencial Primavera">
           </div>
           
-          <div class="form-group half">
+          <div class="form-group">
             <label for="valor" class="required">Valor do aluguel (R$)</label>
             <input type="number" id="valor" name="valor" step="0.01" min="0" required placeholder="Ex: 800.00">
           </div>
           
-          <div class="form-group half">
-            <label for="userProprietario" class="required">Usuário proprietário</label>
-            <input type="text" id="userProprietario" name="userProprietario" required placeholder="Digite seu nome de usuário">
-          </div>
+          <!-- Campo oculto para armazenar o ID do usuário logado -->
+          <input type="hidden" id="userProprietario" name="userProprietario">
         </div>
 
         <div class="form-section">
@@ -276,62 +274,47 @@
       }
     });
 
-    // Buscar usuários disponíveis
-    async function carregarUsuarios() {
-      try {
-        const response = await fetch('/users');
-        if (response.ok) {
-          const usuarios = await response.json();
-          const select = document.getElementById('userProprietario');
-          
-          // Converter o input para um select
-          const inputField = document.getElementById('userProprietario');
-          const parentDiv = inputField.parentElement;
-          
-          // Criar select
-          const selectField = document.createElement('select');
-          selectField.id = 'userProprietario';
-          selectField.name = 'userProprietario';
-          selectField.required = true;
-          selectField.classList = inputField.classList;
-          
-          // Adicionar opção padrão
-          const defaultOption = document.createElement('option');
-          defaultOption.text = 'Selecione um usuário';
-          defaultOption.value = '';
-          selectField.appendChild(defaultOption);
-          
-          // Adicionar usuários como opções
-          usuarios.forEach(usuario => {
-            const option = document.createElement('option');
-            option.value = usuario.user;
-            option.text = usuario.user + (usuario.nome ? ` (${usuario.nome})` : '');
-            selectField.appendChild(option);
-          });
-          
-          // Substituir o input pelo select
-          parentDiv.replaceChild(selectField, inputField);
-          
-        } else {
-          console.error('Erro ao buscar usuários');
-        }
-      } catch (error) {
-        console.error('Erro ao carregar usuários:', error);
+    // Obter o ID do usuário logado e preencher o campo oculto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar se o usuário está logado
+      const userData = localStorage.getItem('userData');
+      if (!userData) {
+        // Redirecionar para a página de login se não estiver logado
+        window.location.href = '/';
+        return;
       }
-    }
 
-    // Carregar usuários ao iniciar a página
-    document.addEventListener('DOMContentLoaded', carregarUsuarios);
+      try {
+        // Parsear dados do usuário do localStorage
+        const user = JSON.parse(userData);
+        
+        // Preencher o campo oculto com o ID do usuário
+        document.getElementById('userProprietario').value = user.user || '';
+        
+        console.log('Usuário proprietário definido automaticamente:', user.user);
+      } catch (error) {
+        console.error('Erro ao processar dados do usuário:', error);
+        alert('Erro ao identificar usuário. Por favor, faça login novamente.');
+        window.location.href = '/';
+      }
+    });
 
     // Envio do formulário
     document.getElementById('cadastrarCasaForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      // Verificar se o userProprietario está preenchido
+      const userProprietario = document.getElementById('userProprietario').value;
+      if (!userProprietario) {
+        alert('Erro: Impossível identificar o proprietário. Por favor, faça login novamente.');
+        return;
+      }
+      
       // Capturar os valores do formulário
       const formData = new FormData();
       formData.append('nome', document.getElementById('nome').value);
       formData.append('valor', document.getElementById('valor').value);
-      formData.append('userProprietario', document.getElementById('userProprietario').value);
+      formData.append('userProprietario', userProprietario);
       formData.append('descricao', document.getElementById('descricao').value);
       formData.append('observacao', document.getElementById('observacao').value);
       

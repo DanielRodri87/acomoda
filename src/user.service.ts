@@ -24,4 +24,20 @@ export class UserService {
     }
     return user;
   }
+
+  async findByUsername(username: string): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { user: username },
+      });
+      return user;
+    } catch (error) {
+      console.error('Erro ao buscar usuário pelo username:', error);
+      return null;
+    }
+  }
+
+  async findAll(): Promise<User[]> {
+    return this.userRepository.find();
+  }
 }

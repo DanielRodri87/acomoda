@@ -10,6 +10,9 @@ export class Casa {
   nome: string;
 
   @Column()
+  tipo: string; // Compartilhado / Sozinho 
+  
+  @Column()
   fotoPrincipal: string;
 
   @Column()

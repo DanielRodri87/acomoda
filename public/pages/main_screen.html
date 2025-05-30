@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/main_screen.css">
     <link rel="stylesheet" href="/assets/css/components/navbar.css">
+    <title>Acomoda - Página Principal</title>
 </head>
 <body>
 <div id="navbar"></div>
@@ -12,12 +13,12 @@
 <div class="perfil">
     <div class="perfil-foto">
         <a href="#perfil-overlay">
-            <img src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário">
+            <img class="profile-user-image" id="user-profile-img" src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário">
         </a>
     </div>
     <div class="perfil-infos">
-        <h1><b>Olá, Luis!</b></h1>
-        <p>luislgl@gmail.com</p>
+        <h1><b>Olá, <span id="user-first-name">Carregando...</span>!</b></h1>
+        <p id="user-email">carregando@email.com</p>
     </div>
 </div>
 
@@ -25,10 +26,10 @@
 <div id="perfil-overlay" class="overlay">
     <div class="overlay-content perfil-overlay-content">
         <div class="perfil-editar">
-            <img src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário" class="perfil-imagem">
-            <h3 class="perfil-nome">Luis Gustavo</h3>
+            <img class="profile-user-image" id="overlay-profile-img" src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário" class="perfil-imagem">
+            <h3 id="overlay-full-name" class="perfil-nome">Carregando...</h3>
             <div class="botao-sair">
-                <a href="#" class="sair-btn">
+                <a href="#" class="sair-btn" id="logout-btn">
                     <img src="../assets/images/main_scream/sair-perfil.png" alt="Sair">
                 </a>
             </div>
@@ -65,19 +66,19 @@
         <div class="botoes-inferior">
             <div class="informacoes">
                 <span>Nome Completo</span>
-                <p>Luis Gustavo</p>
+                <p id="info-full-name">Carregando...</p>
             </div>
             <div class="informacoes">
                 <span>CPF</span>
-                <p>074.452.625-16</p>
+                <p id="info-cpf">Carregando...</p>
             </div>
             <div class="informacoes">
                 <span>Telefone</span>
-                <p>(89)99446-2562</p>
+                <p id="info-phone">Carregando...</p>
             </div>
             <div class="informacoes">
                 <span>Email</span>
-                <p>luislg@gmail.com</p>
+                <p id="info-email">Carregando...</p>
             </div>
         </div>
     </div>
@@ -246,6 +247,7 @@
 </div>
 
 <script src="../assets/js/main.js"></script>
+<script src="../assets/js/buscaruser.js"></script>
 
 </body>
 </html>

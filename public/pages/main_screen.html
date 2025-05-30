@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/main_screen.css">
     <link rel="stylesheet" href="/assets/css/components/navbar.css">
+    <title>Acomoda - Página Principal</title>
 </head>
 <body>
 <div id="navbar"></div>
@@ -12,12 +13,12 @@
 <div class="perfil">
     <div class="perfil-foto">
         <a href="#perfil-overlay">
-            <img src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário">
+            <img class="profile-user-image" id="user-profile-img" src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário">
         </a>
     </div>
     <div class="perfil-infos">
-        <h1><b>Olá, Luis!</b></h1>
-        <p>luislgl@gmail.com</p>
+        <h1><b>Olá, <span id="user-first-name">Carregando...</span>!</b></h1>
+        <p id="user-email">carregando@email.com</p>
     </div>
 </div>
 
@@ -25,10 +26,10 @@
 <div id="perfil-overlay" class="overlay">
     <div class="overlay-content perfil-overlay-content">
         <div class="perfil-editar">
-            <img src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário" class="perfil-imagem">
-            <h3 class="perfil-nome">Luis Gustavo</h3>
+            <img class="profile-user-image" id="overlay-profile-img" src="../assets/images/main_scream/Beatrice_Anime 1.png" alt="Foto de perfil do usuário" class="perfil-imagem">
+            <h3 id="overlay-full-name" class="perfil-nome">Carregando...</h3>
             <div class="botao-sair">
-                <a href="#" class="sair-btn">
+                <a href="#" class="sair-btn" id="logout-btn">
                     <img src="../assets/images/main_scream/sair-perfil.png" alt="Sair">
                 </a>
             </div>
@@ -65,19 +66,19 @@
         <div class="botoes-inferior">
             <div class="informacoes">
                 <span>Nome Completo</span>
-                <p>Luis Gustavo</p>
+                <p id="info-full-name">Carregando...</p>
             </div>
             <div class="informacoes">
                 <span>CPF</span>
-                <p>074.452.625-16</p>
+                <p id="info-cpf">Carregando...</p>
             </div>
             <div class="informacoes">
                 <span>Telefone</span>
-                <p>(89)99446-2562</p>
+                <p id="info-phone">Carregando...</p>
             </div>
             <div class="informacoes">
                 <span>Email</span>
-                <p>luislg@gmail.com</p>
+                <p id="info-email">Carregando...</p>
             </div>
         </div>
     </div>
@@ -164,88 +165,26 @@
     <section class="accommodation-section">
         <h2>Acomodações/repúblicas estudantis</h2>
         <p>Lugares para compartilhar em família, com vários estudantes</p>
-        <div class="accommodations">
-            <!-- Card 1 -->
-            <div class="accommodation-card">
-                <div class="image-info">
-                    <a href="home+.html">
-                        <img  src="../assets/images/main_scream/ap01.png" alt="Apartamento 231 St. Lucia">
-                    </a>
-                </div>
-                <div class="accommodation-info">
-                    <div class="accommodation-title">Apartamento 231 St. Lucia <span class="rating">4.9 ★</span></div>
-                    <div class="accommodation-details">2 quartos, com 2 em cada<br>2 banheiros</div>
-                    <div class="price">R$655 <span style="font-size: 12px;">com água incluso</span></div>
-                </div>
-            </div>
-            <!-- Card 2 -->
-            <div class="accommodation-card">
-                <div class="image-info">
-                    <img src="../assets/images/main_scream/ap02.png" alt="Apartamento 21 Tia Cecilia">
-                </div>
-                <div class="accommodation-info">
-                    <div class="accommodation-title">Apartamento 21 Tia Cecilia <span class="rating">4.8 ★</span></div>
-                    <div class="accommodation-details">1 quartos, com 2 em cada<br>3 banheiros</div>
-                    <div class="price">R$815 <span style="font-size: 12px;">perto do UFF | água incluso</span></div>
-                </div>
-            </div>
-            <!-- Card 3 -->
-            <div class="accommodation-card">
-                <div class="image-info">
-                    <img src="../assets/images/main_scream/ap03.png" alt="Apartamento 231 St. Maria">
-                </div>
-                <div class="accommodation-info">
-                    <div class="accommodation-title">Apartamento 231 St. Maria <span class="rating">4.5 ★</span></div>
-                    <div class="accommodation-details">3 quartos, com 2 em cada<br>2 banheiros</div>
-                    <div class="price">R$600 <span style="font-size: 12px;">sem água incluso</span></div>
-                </div>
-            </div>
+        <div class="accommodations" id="republicas-container">
+            <!-- Cards serão carregados dinamicamente -->
+            <div class="loading-spinner" id="loading-republicas">Carregando acomodações...</div>
         </div>
     </section>
 
     <section class="accommodation-section">
         <h2>Acomodações universitário solitário</h2>
         <p>Alocações disponíveis para apenas 1 novo estudante</p>
-        <div class="accommodations">
-            <!-- Card 4 -->
-            <div class="accommodation-card">
-                <div class="image-info">
-                    <img src="../assets/images/main_scream/ap04.png" alt="Acomodação Universitário Solitário">
-                </div>
-                <div class="accommodation-info">
-                    <div class="accommodation-title">Acomodação 1</div>
-                    <div class="accommodation-details">Descrição breve da acomodação</div>
-                    <div class="price">R$500</div>
-                </div>
-            </div>
-            <!-- Card 5 -->
-            <div class="accommodation-card">
-                <div class="image-info">
-                    <img src="../assets/images/main_scream/ap05.png" alt="Acomodação Universitário Solitário">
-                </div>
-                <div class="accommodation-info">
-                    <div class="accommodation-title">Acomodação 2</div>
-                    <div class="accommodation-details">Descrição breve da acomodação</div>
-                    <div class="price">R$520</div>
-                </div>
-            </div>
-            <!-- Card 6 -->
-            <div class="accommodation-card">
-                <div class="image-info">
-                    <img src="../assets/images/main_scream/ap06.png" alt="Acomodação Universitário Solitário">
-                </div>
-                <div class="accommodation-info">
-                    <div class="accommodation-title">Acomodação 3</div>
-                    <div class="accommodation-details">Descrição breve da acomodação</div>
-                    <div class="price">R$550</div>
-                </div>
-            </div>
+        <div class="accommodations" id="individuais-container">
+            <!-- Cards serão carregados dinamicamente -->
+            <div class="loading-spinner" id="loading-individuais">Carregando acomodações...</div>
         </div>
     </section>
 
 </div>
 
 <script src="../assets/js/main.js"></script>
+<script src="../assets/js/buscaruser.js"></script>
+<script src="../assets/js/carregarCasas.js"></script>
 
 </body>
 </html>

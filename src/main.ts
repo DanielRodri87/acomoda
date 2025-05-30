@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 
 async function bootstrap() {
+  // Criar aplicação NestJS com o adaptador Express explícito
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
   // Configurar pasta de arquivos estáticos

@@ -22,12 +22,13 @@
                 <h3>Seja bem-vindo ao Acomoda!</h3>
                 <form id="loginForm">
                     <label for="user">User</label>
-                    <input type="text" id="user" placeholder="Digite seu e-mail aqui">
+                    <input type="text" id="user" placeholder="Digite seu usuário aqui">
     
                     <label for="senha">Senha</label>
                     <input type="password" id="senha" placeholder="Digite sua senha aqui">
     
                     <button type="submit">Login</button>
+                    <div id="error-message" style="color: red; display: none; margin-top: 10px;"></div>
                     <a href="pages/password.html">Esqueceu sua senha?</a>
                     <p>Não possui cadastro? <a href="pages/register.html">Cadastre-se</a></p>
                 </form>
@@ -37,5 +38,50 @@
     <!-- Script para carregar o conteúdo da navbar -->
     <script src="/assets/js/database.js"></script>
     <script src="/assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('error-message');
+            
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const user = document.getElementById('user').value;
+                const senha = document.getElementById('senha').value;
+                
+                if (!user || !senha) {
+                    errorMessage.textContent = 'Por favor, preencha todos os campos';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ user, senha })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Erro no login');
+                    }
+                    
+                    // Salvar dados do usuário no localStorage
+                    localStorage.setItem('userData', JSON.stringify(data.user));
+                    
+                    // Redirecionar para a página principal
+                    window.location.href = '/pages/main_screen.html';
+                    
+                } catch (error) {
+                    errorMessage.textContent = error.message || 'Erro ao fazer login. Verifique suas credenciais.';
+                    errorMessage.style.display = 'block';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -3,6 +3,14 @@
 npm install fs-extra
 npm install @types/fs-extra --save-dev
 
+npm install --save @nestjs/serve-static
+
+npm install --save-dev @types/multer @types/express
+
+npm install --save express
+
+npm install --save @types/express
+
 2. Instalar e configurar o PostGreSQL
 
 sudo -i -u postgres

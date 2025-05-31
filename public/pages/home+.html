@@ -223,8 +223,7 @@
     // Função para carregar imagens adicionais
     async function carregarImagensAdicionais(casaId) {
         try {
-            const containerId = 'imagens-adicionais';
-            const container = document.getElementById(containerId);
+            const container = document.getElementById('imagens-adicionais');
             
             // Limpar o container
             container.innerHTML = '';
@@ -236,10 +235,13 @@
             }
             
             const data = await response.json();
-            const fotos = data.fotos || data || [];
+            const fotos = data.fotos || [];
             
             if (fotos.length === 0) {
                 container.innerHTML = '<p class="no-images">Não há imagens adicionais disponíveis</p>';
+                // Desabilitar botões de navegação
+                document.getElementById('prev-image').style.opacity = '0.3';
+                document.getElementById('next-image').style.opacity = '0.3';
                 return;
             }
             
@@ -252,7 +254,7 @@
                 container.appendChild(img);
             });
             
-            // Configurar navegação do carrossel
+            // Configurar navegação do carrossel após adicionar todas as imagens
             configurarCarrossel();
             
         } catch (error) {
@@ -267,25 +269,64 @@
         const container = document.getElementById('imagens-adicionais');
         const prevBtn = document.getElementById('prev-image');
         const nextBtn = document.getElementById('next-image');
-        let scrollAmount = 0;
         
-        // Função para rolar para a direita
-        nextBtn.addEventListener('click', function() {
-            scrollAmount += 360; // Aproximadamente a largura de uma imagem + gap
-            container.scrollTo({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
+        // Verificar se há imagens suficientes para navegar
+        const imagens = container.querySelectorAll('.carousel-image-custom');
+        if (imagens.length <= 1) {
+            prevBtn.style.opacity = '0.3';
+            nextBtn.style.opacity = '0.3';
+            prevBtn.style.cursor = 'not-allowed';
+            nextBtn.style.cursor = 'not-allowed';
+            return;
+        }
+        
+        // Variáveis para controlar a posição do carrossel
+        let position = 0;
+        const imageWidth = 315; // Largura da imagem + gap
+        const visibleImages = Math.floor((container.parentElement.offsetWidth - 80) / imageWidth);
+        let maxPosition = imagens.length - visibleImages;
+        
+        // Função para atualizar a posição das imagens
+        function updatePosition() {
+            container.style.transform = `translateX(${-position * imageWidth}px)`;
+            
+            // Atualizar estado dos botões
+            prevBtn.style.opacity = position <= 0 ? '0.3' : '1';
+            nextBtn.style.opacity = position >= maxPosition ? '0.3' : '1';
+            prevBtn.style.cursor = position <= 0 ? 'not-allowed' : 'pointer';
+            nextBtn.style.cursor = position >= maxPosition ? 'not-allowed' : 'pointer';
+        }
+        
+        // Evento para o botão anterior
+        prevBtn.addEventListener('click', () => {
+            if (position > 0) {
+                position--;
+                updatePosition();
+            }
         });
         
-        // Função para rolar para a esquerda
-        prevBtn.addEventListener('click', function() {
-            scrollAmount -= 360;
-            if (scrollAmount < 0) scrollAmount = 0;
-            container.scrollTo({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
+        // Evento para o botão próximo
+        nextBtn.addEventListener('click', () => {
+            if (position < maxPosition) {
+                position++;
+                updatePosition();
+            }
+        });
+        
+        // Inicializar posição
+        updatePosition();
+        
+        // Adicionar evento de redimensionamento da janela para ajustar o carrossel
+        window.addEventListener('resize', () => {
+            const newVisibleImages = Math.floor((container.parentElement.offsetWidth - 80) / imageWidth);
+            const newMaxPosition = imagens.length - newVisibleImages;
+            
+            // Ajustar posição se necessário
+            if (position > newMaxPosition) position = Math.max(0, newMaxPosition);
+            
+            // Atualizar máximo e reposicionar
+            maxPosition = newMaxPosition;
+            updatePosition();
         });
     }
 </script>

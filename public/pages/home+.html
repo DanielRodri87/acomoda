@@ -129,6 +129,19 @@
    
     </section>
 
+<!-- Modal para exibir contato do proprietário -->
+<div id="proprietario-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Informações de Contato</h2>
+        <div id="proprietario-info">
+            <p><strong>Nome:</strong> <span id="proprietario-nome">Carregando...</span></p>
+            <p><strong>Telefone:</strong> <span id="proprietario-telefone">Carregando...</span></p>
+            <p><strong>Email:</strong> <span id="proprietario-email">Carregando...</span></p>
+        </div>
+    </div>
+</div>
+
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/buscaruser.js"></script>
 <script>
@@ -189,8 +202,8 @@
             
             // Configurar o botão de contato
             document.getElementById('btn-contato').addEventListener('click', function() {
-                alert(`Entre em contato com o proprietário da acomodação "${casa.nome}"`);
-                // Pode redirecionar para uma página de chat ou mostrar informações de contato
+                // Buscar informações do proprietário e exibir o modal
+                buscarDadosProprietario(casa.userProprietario);
             });
             
         } catch (error) {
@@ -329,7 +342,114 @@
             updatePosition();
         });
     }
+    
+    // Função para buscar dados do proprietário e exibir o modal
+    async function buscarDadosProprietario(proprietarioId) {
+        // Verificar se o ID do proprietário está disponível
+        if (!proprietarioId) {
+            alert('Informações do proprietário não disponíveis');
+            return;
+        }
+        
+        console.log(`Tentando buscar dados do proprietário com ID: ${proprietarioId}`);
+        
+        try {
+            // Buscar dados do proprietário na API - corrigindo o endpoint
+            // Observando buscaruser.js, o endpoint correto é /users/ sem o prefixo api
+            const response = await fetch(`/users/${proprietarioId}`);
+            
+            console.log('Status da resposta:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`Não foi possível buscar dados do proprietário. Status: ${response.status}`);
+            }
+            
+            const proprietario = await response.json();
+            console.log('Dados do proprietário recebidos:', proprietario);
+            
+            // Verificar se os dados do proprietário estão presentes
+            if (!proprietario) {
+                throw new Error('Dados do proprietário estão vazios');
+            }
+            
+            // Preencher o modal com os dados do proprietário
+            document.getElementById('proprietario-nome').textContent = 
+                `${proprietario.primeiro_nome || ''} ${proprietario.segundo_nome || ''}`.trim() || 'Não informado';
+            document.getElementById('proprietario-telefone').textContent = 
+                proprietario.numero || 'Não informado';
+            document.getElementById('proprietario-email').textContent = 
+                proprietario.email || 'Não informado';
+            
+            // Exibir o modal
+            const modal = document.getElementById('proprietario-modal');
+            modal.style.display = 'block';
+            
+            // Configurar botão de fechar o modal
+            const closeBtn = document.getElementsByClassName('close')[0];
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            // Fechar modal ao clicar fora dele
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+            
+        } catch (error) {
+            console.error('Erro ao buscar dados do proprietário:', error);
+            alert('Não foi possível carregar as informações de contato do proprietário: ' + error.message);
+        }
+    }
 </script>
+
+<style>
+/* Estilos para o modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 50%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+#proprietario-info {
+    margin-top: 20px;
+}
+
+#proprietario-info p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+</style>
 
 </body>
 </html>

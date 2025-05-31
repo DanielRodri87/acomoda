@@ -5,74 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/home+.css">
     <link rel="stylesheet" href="/assets/css/components/navbar.css">
+    <title>Detalhes da Acomodação - Acomoda</title>
 </head>
 <body>
 
 <div id="navbar"></div>
 <div class="perfil">
     <div class="perfil-foto">
-        <img src="../assets/images/home+/Beatrice_Anime 1.png" alt="Foto de perfil do usuário">
+        <img src="../assets/images/home+/Beatrice_Anime 1.png" alt="Foto de perfil do usuário" class="profile-user-image" id="user-profile-img">
     </div>
     <div class="perfil-infos">
-        <h1><b>Olá, Luis!</b></h1>
-        <p>luislgl@gmail.com</p>
+        <h1><b>Olá, <span id="user-first-name">Luis</span>!</b></h1>
+        <p id="user-email">luislgl@gmail.com</p>
     </div>
 </div>
 
 <section class="accommodation-section-new">
-    <h2>Opa, será essa uma nova morada?</h2>
-    <p>O conforto de um possível novo lar, sinta a emoção</p>
-    
+    <h2>Detalhes da Acomodação</h2>
+    <p>Confira todos os detalhes desta acomodação</p>
     
     <div class="accommodations-new">
-        <!-- Novo Card -->
+        <!-- Card com informações da casa -->
         <div class="accommodation-card-new">
             <div class="image-info-new">
-                <img class="rounded-image" src="../assets/images/home+/ap01.png" alt="Apartamento 231 St. Lucia">
+                <img class="rounded-image" id="casa-imagem-principal" src="../assets/images/home+/ap01.png" alt="Imagem do imóvel">
             </div>
             <div class="accommodation-info-new">
                 
                 <div class="accommodation-title-new">
-                    <h4>Apartamento 231 St. Lucia </h3>
+                    <h4 id="casa-nome">Carregando...</h4>
                     <span class="rating-new"> ★★★★★<br/> <p class="estrela">4.9</p> </span>
-                    
                 </div>
                 <div class="price-new">
-                    <h1>R$655   <button>Fale com o dono</button>  <img class="heart-icon" src="../assets/images/home+/heart.png" alt="">
+                    <h1 id="casa-valor">R$0.00</h1>   
+                    <button id="btn-contato">Fale com o dono</button>  
+                    <img class="heart-icon" src="../assets/images/home+/heart.png" alt="Favoritar">
 
-                    <span style="font-size: 12px;"><br> <p class="descricao">com água incluso</p></span> 
-                   
+                    <span style="font-size: 12px;"><br><p class="descricao" id="casa-observacao">Carregando observação...</p></span>
                 </div>
-                <div class="accommodation-details-new">
-                    Proprietário: Fernando Pessoa<br>2 quartos <br>2 banheiros<br>1 cozinha<br>Próximo à UFPI
+                <div class="accommodation-details-new" id="casa-detalhes">
+                    Carregando detalhes...
                 </div>
             </div>
         </div>
     </div>
-    
 </section>
 
 <section class="accommodation-section-custom">
-    <h2>Opa, será essa uma nova morada?</h2>
-    <p>O conforto de um possível novo lar, sinta a emoção</p>
+    <h2>Galeria de Imagens</h2>
+    <p>Veja mais fotos desta acomodação</p>
     
     <div class="image-carousel-custom">
         <!-- Círculo para a esquerda -->
-        <div class="circle-left-custom">&#8592;</div>
+        <div class="circle-left-custom" id="prev-image">&#8592;</div>
         
         <!-- Imagens -->
-        <div class="image-container-custom">
-            <img src="../assets/images/home+/image (6).png" alt="Imagem 1" class="carousel-image-custom">
-            <img src="../assets/images/home+/image 26.png" alt="Imagem 2" class="carousel-image-custom">
-            <img src="../assets/images/home+/image 27.png" alt="Imagem 3" class="carousel-image-custom">
+        <div class="image-container-custom" id="imagens-adicionais">
+            <!-- As imagens serão carregadas dinamicamente -->
+            <div class="carousel-image-custom loading-placeholder">Carregando imagens...</div>
         </div>
         
         <!-- Círculo para a direita -->
-        <div class="circle-right-custom">&#8594;</div>
+        <div class="circle-right-custom" id="next-image">&#8594;</div>
     </div>
 </section>
 
-
+<!-- Manter o restante do HTML como está -->
 <section class="accommodation-section-custom">
     <h2>Quer deixar um comentário/dúvida?</h2>
     <p>Veja também outros feedbacks de demais usuários</p>
@@ -132,6 +130,165 @@
     </section>
 
 <script src="../assets/js/main.js"></script>
+<script src="../assets/js/buscaruser.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Obter o ID da casa da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const casaId = urlParams.get('id');
+        
+        if (!casaId) {
+            alert('ID da casa não encontrado na URL');
+            // Redirecionar para a página principal se não houver ID
+            window.location.href = '/pages/main_screen.html';
+            return;
+        }
+        
+        try {
+            // Fazer requisição à API para buscar dados da casa
+            const response = await fetch(`/api/casas/${casaId}`);
+            if (!response.ok) {
+                throw new Error('Não foi possível buscar detalhes da casa');
+            }
+            
+            const data = await response.json();
+            const casa = data.data || data; // Ajustar conforme a estrutura da resposta
+            
+            // Verificar se os dados da casa estão corretos
+            if (!casa || !casa.nome) {
+                throw new Error('Dados da casa inválidos');
+            }
+            
+            // Preencher dados da casa no HTML
+            document.getElementById('casa-nome').textContent = casa.nome;
+            
+            // Formatar o valor para moeda brasileira
+            const valorFormatado = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(casa.valor);
+            document.getElementById('casa-valor').textContent = valorFormatado;
+            
+            // Observação
+            document.getElementById('casa-observacao').textContent = casa.observacao || 'Sem observações adicionais';
+            
+            // Detalhes
+            document.getElementById('casa-detalhes').innerHTML = formatarDescricao(casa.descricao, casa.userProprietario);
+            
+            // Imagem principal
+            if (casa.fotoPrincipal) {
+                document.getElementById('casa-imagem-principal').src = casa.fotoPrincipal;
+                document.getElementById('casa-imagem-principal').alt = casa.nome;
+            }
+            
+            // Título da página
+            document.title = `${casa.nome} - Acomoda`;
+            
+            // Buscar imagens adicionais
+            carregarImagensAdicionais(casaId);
+            
+            // Configurar o botão de contato
+            document.getElementById('btn-contato').addEventListener('click', function() {
+                alert(`Entre em contato com o proprietário da acomodação "${casa.nome}"`);
+                // Pode redirecionar para uma página de chat ou mostrar informações de contato
+            });
+            
+        } catch (error) {
+            console.error('Erro ao carregar detalhes da casa:', error);
+            alert('Erro ao carregar detalhes da acomodação. Por favor, tente novamente.');
+        }
+    });
+    
+    // Função para formatar a descrição e adicionar informações do proprietário
+    function formatarDescricao(descricao, proprietarioId) {
+        if (!descricao) return 'Sem descrição disponível.';
+        
+        // Extrair informações úteis da descrição (quartos, banheiros, etc.)
+        let detalhesHTML = '';
+        
+        // Adicionar nome do proprietário
+        detalhesHTML += `<p><strong>Proprietário:</strong> ${proprietarioId || 'Não informado'}</p><br>`;
+        
+        // Quebrar a descrição em parágrafos para melhor legibilidade
+        const paragrafos = descricao.split('\n');
+        for (const p of paragrafos) {
+            if (p.trim().length > 0) {
+                detalhesHTML += `<p>${p}</p><br>`;
+            }
+        }
+        
+        return detalhesHTML;
+    }
+    
+    // Função para carregar imagens adicionais
+    async function carregarImagensAdicionais(casaId) {
+        try {
+            const containerId = 'imagens-adicionais';
+            const container = document.getElementById(containerId);
+            
+            // Limpar o container
+            container.innerHTML = '';
+            
+            // Fazer a requisição para buscar as fotos adicionais
+            const response = await fetch(`/api/casas/${casaId}/fotos`);
+            if (!response.ok) {
+                throw new Error('Falha ao carregar imagens adicionais');
+            }
+            
+            const data = await response.json();
+            const fotos = data.fotos || data || [];
+            
+            if (fotos.length === 0) {
+                container.innerHTML = '<p class="no-images">Não há imagens adicionais disponíveis</p>';
+                return;
+            }
+            
+            // Adicionar cada imagem ao carrossel
+            fotos.forEach(foto => {
+                const img = document.createElement('img');
+                img.src = foto.url;
+                img.alt = "Foto adicional";
+                img.className = 'carousel-image-custom';
+                container.appendChild(img);
+            });
+            
+            // Configurar navegação do carrossel
+            configurarCarrossel();
+            
+        } catch (error) {
+            console.error('Erro ao carregar imagens adicionais:', error);
+            document.getElementById('imagens-adicionais').innerHTML = 
+                '<p class="error-message">Erro ao carregar imagens adicionais</p>';
+        }
+    }
+    
+    // Função para configurar o carrossel de imagens
+    function configurarCarrossel() {
+        const container = document.getElementById('imagens-adicionais');
+        const prevBtn = document.getElementById('prev-image');
+        const nextBtn = document.getElementById('next-image');
+        let scrollAmount = 0;
+        
+        // Função para rolar para a direita
+        nextBtn.addEventListener('click', function() {
+            scrollAmount += 360; // Aproximadamente a largura de uma imagem + gap
+            container.scrollTo({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Função para rolar para a esquerda
+        prevBtn.addEventListener('click', function() {
+            scrollAmount -= 360;
+            if (scrollAmount < 0) scrollAmount = 0;
+            container.scrollTo({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+    }
+</script>
 
 </body>
 </html>

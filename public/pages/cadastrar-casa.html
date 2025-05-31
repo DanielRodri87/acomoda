@@ -115,11 +115,20 @@
       text-align: center;
     }
 
+    .fotos-counter {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+    }
+    
     .preview-images {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 15px;
+      width: 100%;
+      justify-content: center;
     }
 
     .preview-image {
@@ -128,6 +137,29 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       object-fit: cover;
+      position: relative;
+    }
+    
+    .preview-image-container {
+      position: relative;
+    }
+    
+    .preview-remove-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
     }
 
     .submit-btn {
@@ -223,6 +255,7 @@
             <label for="fotosAdicionais">Fotos adicionais</label>
             <div class="file-input-container">
               <div class="preview-images" id="fotosPreview"></div>
+              <div id="fotosCounter" class="fotos-counter">0 de 5 fotos selecionadas</div>
               <input type="file" id="fotosAdicionais" name="fotosAdicionais" class="file-input" accept="image/*" multiple>
               <span class="file-input-label">Selecionar Fotos Adicionais (máx. 5)</span>
             </div>
@@ -250,24 +283,75 @@
       }
     });
 
+    // Array para armazenar as fotos que estão atualmente no preview
+    let previewedImages = [];
+    let nextImageIndex = 0;
+
     // Visualização prévia das fotos adicionais
     document.getElementById('fotosAdicionais').addEventListener('change', function(e) {
       const files = e.target.files;
       const preview = document.getElementById('fotosPreview');
-      preview.innerHTML = '';
+      const counter = document.getElementById('fotosCounter');
       
-      // Limitar a 5 imagens
-      const maxFiles = Math.min(files.length, 5);
+      // Não limpa mais o preview - agora adicionamos às imagens existentes
       
-      for (let i = 0; i < maxFiles; i++) {
+      // Verificar quantas imagens ainda podemos adicionar
+      const currentCount = previewedImages.length;
+      const remainingSlots = 5 - currentCount;
+      
+      if (remainingSlots <= 0) {
+        alert('Você já atingiu o limite de 5 fotos. Remova algumas para adicionar novas.');
+        return;
+      }
+      
+      // Limitar às vagas restantes
+      const maxFilesToAdd = Math.min(files.length, remainingSlots);
+      
+      for (let i = 0; i < maxFilesToAdd; i++) {
         const file = files[i];
         const reader = new FileReader();
         
         reader.onload = function(event) {
+          const imgIndex = nextImageIndex++;
+          previewedImages.push({
+            index: imgIndex,
+            file: file,
+            dataUrl: event.target.result
+          });
+          
+          const container = document.createElement('div');
+          container.className = 'preview-image-container';
+          container.dataset.index = imgIndex;
+          
           const img = document.createElement('img');
           img.src = event.target.result;
           img.className = 'preview-image';
-          preview.appendChild(img);
+          img.dataset.index = imgIndex;
+          
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'preview-remove-btn';
+          removeBtn.innerHTML = '&times;';
+          removeBtn.title = 'Remover esta imagem';
+          removeBtn.dataset.index = imgIndex;
+          removeBtn.onclick = function(e) {
+            e.preventDefault();
+            // Remover do DOM
+            container.remove();
+            
+            // Remover do array de imagens
+            const index = parseInt(this.dataset.index);
+            previewedImages = previewedImages.filter(img => img.index !== index);
+            
+            // Atualizar o contador
+            counter.textContent = `${previewedImages.length} de 5 fotos selecionadas`;
+          };
+          
+          container.appendChild(img);
+          container.appendChild(removeBtn);
+          preview.appendChild(container);
+          
+          // Atualizar o contador após adicionar a imagem
+          counter.textContent = `${previewedImages.length} de 5 fotos selecionadas`;
         };
         
         reader.readAsDataURL(file);
@@ -321,6 +405,16 @@
       // Adicionar a foto principal
       const fotoPrincipal = document.getElementById('fotoPrincipal').files[0];
       formData.append('fotoPrincipal', fotoPrincipal);
+      
+      // Adicionar as fotos adicionais
+      if (previewedImages.length > 0) {
+        console.log(`Enviando ${previewedImages.length} fotos adicionais`);
+        
+        // Adicionar cada imagem do nosso array controlado
+        previewedImages.forEach(imgData => {
+          formData.append('fotosAdicionais', imgData.file);
+        });
+      }
       
       try {
         // Exibir mensagem de carregamento

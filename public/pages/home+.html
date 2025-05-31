@@ -185,8 +185,9 @@
             // Observação
             document.getElementById('casa-observacao').textContent = casa.observacao || 'Sem observações adicionais';
             
-            // Detalhes
-            document.getElementById('casa-detalhes').innerHTML = formatarDescricao(casa.descricao, casa.userProprietario);
+            // Detalhes 
+            // Modificado para passar apenas o ID do proprietário para a função
+            document.getElementById('casa-detalhes').innerHTML = await formatarDescricao(casa.descricao, casa.userProprietario);
             
             // Imagem principal
             if (casa.fotoPrincipal) {
@@ -212,15 +213,41 @@
         }
     });
     
+    // Função para buscar dados do proprietário (reutilizável)
+    async function buscarProprietario(proprietarioId) {
+        if (!proprietarioId) {
+            return null;
+        }
+        
+        try {
+            const response = await fetch(`/users/${proprietarioId}`);
+            if (!response.ok) {
+                throw new Error(`Erro ao buscar proprietário: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Erro ao buscar proprietário:', error);
+            return null;
+        }
+    }
+    
     // Função para formatar a descrição e adicionar informações do proprietário
-    function formatarDescricao(descricao, proprietarioId) {
+    async function formatarDescricao(descricao, proprietarioId) {
         if (!descricao) return 'Sem descrição disponível.';
         
         // Extrair informações úteis da descrição (quartos, banheiros, etc.)
         let detalhesHTML = '';
         
-        // Adicionar nome do proprietário
-        detalhesHTML += `<p><strong>Proprietário:</strong> ${proprietarioId || 'Não informado'}</p><br>`;
+        // Buscar os dados completos do proprietário
+        const proprietario = await buscarProprietario(proprietarioId);
+        
+        // Adicionar nome do proprietário (agora com o nome real, não apenas o ID)
+        if (proprietario) {
+            const nomeCompleto = `${proprietario.primeiro_nome || ''} ${proprietario.segundo_nome || ''}`.trim();
+            detalhesHTML += `<p><strong>Proprietário:</strong> ${nomeCompleto || 'Não informado'}</p><br>`;
+        } else {
+            detalhesHTML += `<p><strong>Proprietário:</strong> Não informado</p><br>`;
+        }
         
         // Quebrar a descrição em parágrafos para melhor legibilidade
         const paragrafos = descricao.split('\n');
@@ -354,20 +381,8 @@
         console.log(`Tentando buscar dados do proprietário com ID: ${proprietarioId}`);
         
         try {
-            // Buscar dados do proprietário na API - corrigindo o endpoint
-            // Observando buscaruser.js, o endpoint correto é /users/ sem o prefixo api
-            const response = await fetch(`/users/${proprietarioId}`);
+            const proprietario = await buscarProprietario(proprietarioId);
             
-            console.log('Status da resposta:', response.status);
-            
-            if (!response.ok) {
-                throw new Error(`Não foi possível buscar dados do proprietário. Status: ${response.status}`);
-            }
-            
-            const proprietario = await response.json();
-            console.log('Dados do proprietário recebidos:', proprietario);
-            
-            // Verificar se os dados do proprietário estão presentes
             if (!proprietario) {
                 throw new Error('Dados do proprietário estão vazios');
             }

@@ -133,94 +133,65 @@
 }
 
 .image-carousel-custom {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   
-    gap: 20px; /* Espaço entre as setas e as imagens */
+    position: relative;
+    max-width: 1200px;
+    margin: 30px auto;
+    overflow: hidden;
+    padding: 0 40px;
 }
 
 .circle-left-custom, .circle-right-custom {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: #62937d;
+    border-radius: 50%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 35px;  /* Reduzindo o tamanho das setas */
-    height: 35px; /* Reduzindo o tamanho das setas */
-    background-color: #62937d8a;
-    color: rgb(0, 0, 0);
-    border-radius: 50%; /* Garantindo que as setas sejam circulares */
-    font-size: 14px; /* Ajuste o tamanho do ícone */
+    justify-content: center;
+    font-size: 18px;
+    color: #fff;
     cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     user-select: none;
-    margin-left: 5px;
-    margin-right: 5px;
 }
 
+.circle-left-custom { left: 0; }
+.circle-right-custom { right: 0; }
+
 .image-container-custom {
-    
     display: flex;
-    gap: 20px; /* Espaço entre as imagens */
+    transition: transform 0.4s ease-in-out;
+    gap: 15px;
+    width: 100%;
+    /* Removendo os estilos de overflow, pois agora vamos controlar isso via JavaScript */
+    overflow: visible;
 }
 
 .carousel-image-custom {
-    margin-top: 30px;
-    width: 340px; /* Aumenta o tamanho das imagens */
-    height: 250px; /* Aumenta o tamanho das imagens */
+    flex: 0 0 auto;  /* Não permitir que as imagens cresçam ou encolham */
+    width: 300px;
+    height: 225px;
     object-fit: cover;
-    border-radius: 8px; /* Bordas arredondadas */
-    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
 }
 
-.conteirner3 {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #D9D9D9;
-
-    border-radius: 8px;
-    width: 1180px;
-    height: 80px; /* Aumentei a altura para acomodar melhor os elementos */
-  }
-  
-  .square-left {
-    flex-basis: 5%; /* Ocupa 20% da largura do contêiner */
-    max-width: 20%;
-    margin-right: 10px;
-    height: 70%; /* Ajusta para caber dentro do contêiner */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent; /* Remove o fundo do quadrado */
-  }
-  
-  .square-left img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-  
-  .square-right {
-    flex-basis: 99%; /* Ocupa 75% da largura do contêiner */
-    height: 80%; /* Ajusta para caber dentro do contêiner */
-    background-color: #F9F9F9;
-    border-radius: 20px; /* Adiciona bordas arredondadas */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   /* Espaçamento entre a imagem e o quadrado */
+.loading-placeholder, .no-images, .error-message {
+    width: 100%;
     text-align: center;
-    box-shadow: none;;
-    padding: 10px;
-  }
+    padding: 30px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    color: #666;
+}
 
-  .square-text {
-    margin-top: 4px; /* Remove margens padrão */
-   /* Ajusta o espaço entre o texto e o topo */
-    align-self: flex-start;
-    margin-right: 900px; /* Garante que o texto se alinhe ao início */
+.error-message {
+    color: #e74c3c;
 }
 
 .comment-box {

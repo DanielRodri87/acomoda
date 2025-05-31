@@ -1,5 +1,5 @@
-import { Controller, Post, Get, Body, UseInterceptors, UploadedFiles, UploadedFile, BadRequestException } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Controller, Post, Get, Body, UseInterceptors, UploadedFiles, UploadedFile, BadRequestException, Param } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Casa, FotoCasa } from '../database/casa/casa.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -42,33 +42,41 @@ export class CasaController {
     filename: (req, file, callback) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
       const ext = extname(file.originalname);
-      callback(null, `casa-${uniqueSuffix}${ext}`);
+      const prefix = file.fieldname === 'fotoPrincipal' ? 'principal' : 'adicional';
+      callback(null, `${prefix}-${uniqueSuffix}${ext}`);
     },
   });
 
-  // Endpoint para criar uma nova casa
+  // Endpoint para criar uma nova casa com fotos adicionais
   @Post()
   @UseInterceptors(
-    FileInterceptor('fotoPrincipal', {
-      storage: diskStorage({
-        destination: './public/uploads/casas',
-        filename: (req, file, callback) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `principal-${uniqueSuffix}${ext}`);
+    FileFieldsInterceptor(
+      [
+        { name: 'fotoPrincipal', maxCount: 1 },
+        { name: 'fotosAdicionais', maxCount: 5 }
+      ],
+      {
+        storage: diskStorage({
+          destination: './public/uploads/casas',
+          filename: (req, file, callback) => {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            const ext = extname(file.originalname);
+            const prefix = file.fieldname === 'fotoPrincipal' ? 'principal' : 'adicional';
+            callback(null, `${prefix}-${uniqueSuffix}${ext}`);
+          },
+        }),
+        fileFilter: (req, file, callback) => {
+          if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+            return callback(new BadRequestException('Apenas arquivos de imagem são permitidos!'), false);
+          }
+          callback(null, true);
         },
-      }),
-      fileFilter: (req, file, callback) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-          return callback(new BadRequestException('Apenas arquivos de imagem são permitidos!'), false);
-        }
-        callback(null, true);
-      },
-    }),
+      }
+    )
   )
   async criarCasa(
     @Body() casaData: any,
-    @UploadedFile() fotoPrincipal: MulterFile, // Usando nosso tipo personalizado
+    @UploadedFiles() files: { fotoPrincipal?: MulterFile[], fotosAdicionais?: MulterFile[] }
   ) {
     try {
       // Garantir que o diretório existe
@@ -76,6 +84,13 @@ export class CasaController {
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
+      
+      // Verificar se a foto principal foi enviada
+      if (!files.fotoPrincipal || !files.fotoPrincipal[0]) {
+        throw new BadRequestException('A foto principal é obrigatória');
+      }
+      
+      const fotoPrincipal = files.fotoPrincipal[0];
       
       // Criar a entidade Casa
       const novaCasa = new Casa();
@@ -91,10 +106,24 @@ export class CasaController {
       // Salvar a casa no banco de dados
       const casaSalva = await this.casaRepository.save(novaCasa);
       
+      // Salvar fotos adicionais, se existirem
+      const fotosSalvas: FotoCasa[] = [];
+      if (files.fotosAdicionais && files.fotosAdicionais.length > 0) {
+        for (const foto of files.fotosAdicionais) {
+          const novaFoto = new FotoCasa();
+          novaFoto.idCasa = casaSalva.idCasa;
+          novaFoto.url = `/uploads/casas/${foto.filename}`;
+          
+          const fotoSalva = await this.fotoCasaRepository.save(novaFoto);
+          fotosSalvas.push(fotoSalva);
+        }
+      }
+      
       return {
         success: true,
         mensagem: 'Casa cadastrada com sucesso',
         casa: casaSalva,
+        fotosAdicionais: fotosSalvas.length > 0 ? fotosSalvas : null,
       };
     } catch (error) {
       console.error('Erro ao cadastrar casa:', error);
@@ -102,7 +131,7 @@ export class CasaController {
     }
   }
 
-  // Endpoint para adicionar fotos adicionais
+  // Endpoint para adicionar fotos adicionais a uma casa existente
   @Post(':id/fotos')
   @UseInterceptors(
     FilesInterceptor('fotos', 5, {
@@ -123,8 +152,8 @@ export class CasaController {
     }),
   )
   async adicionarFotos(
-    @Body('idCasa') idCasa: number,
-    @UploadedFiles() fotos: Array<MulterFile>, // Usando nosso tipo personalizado
+    @Param('id') idCasa: number,
+    @UploadedFiles() fotos: Array<MulterFile>
   ) {
     try {
       const casa = await this.casaRepository.findOne({where: {idCasa: idCasa}});
@@ -168,6 +197,44 @@ export class CasaController {
     } catch (error) {
       console.error('Erro ao listar casas:', error);
       throw new BadRequestException('Erro ao listar casas: ' + error.message);
+    }
+  }
+
+  // Endpoint para buscar uma casa específica pelo ID
+  @Get(':id')
+  async buscarCasaPorId(@Param('id') idCasa: number) {
+    try {
+      // Buscar a casa pelo ID
+      const casa = await this.casaRepository.findOne({where: {idCasa}});
+      
+      if (!casa) {
+        throw new BadRequestException(`Casa com ID ${idCasa} não encontrada`);
+      }
+      
+      return {
+        success: true,
+        data: casa,
+      };
+    } catch (error) {
+      console.error(`Erro ao buscar casa com ID ${idCasa}:`, error);
+      throw new BadRequestException('Erro ao buscar casa: ' + error.message);
+    }
+  }
+
+  // Endpoint para buscar fotos adicionais de uma casa
+  @Get(':id/fotos')
+  async buscarFotosCasa(@Param('id') idCasa: number) {
+    try {
+      // Buscar fotos da casa pelo ID
+      const fotos = await this.fotoCasaRepository.find({where: {idCasa}});
+      
+      return {
+        success: true,
+        fotos: fotos,
+      };
+    } catch (error) {
+      console.error(`Erro ao buscar fotos da casa com ID ${idCasa}:`, error);
+      throw new BadRequestException('Erro ao buscar fotos: ' + error.message);
     }
   }
 }

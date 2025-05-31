@@ -29,7 +29,7 @@ export class CasaController {
     private fotoCasaRepository: Repository<FotoCasa>,
   ) {}
 
-  // Configuração do storage para imagens
+  // Configuração do storage para imagens (mantida como estava)
   private readonly imageFileFilter = (req, file, callback) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       return callback(new BadRequestException('Apenas arquivos de imagem são permitidos!'), false);
@@ -99,6 +99,8 @@ export class CasaController {
       novaCasa.userProprietario = casaData.userProprietario;
       novaCasa.descricao = casaData.descricao;
       novaCasa.observacao = casaData.observacao;
+      novaCasa.status = casaData.status; // Adicionei também o status que parecia faltar
+      novaCasa.tipo = casaData.tipo; // <<<--- CORREÇÃO ADICIONADA AQUI
       
       // Caminho da foto principal relativo à pasta pública
       novaCasa.fotoPrincipal = `/uploads/casas/${fotoPrincipal.filename}`;
@@ -127,7 +129,8 @@ export class CasaController {
       };
     } catch (error) {
       console.error('Erro ao cadastrar casa:', error);
-      throw new BadRequestException('Erro ao cadastrar casa: ' + error.message);
+      // Considerar retornar um erro mais específico ou usar um logger
+      throw new BadRequestException(`Erro ao cadastrar casa: ${error.message}`); 
     }
   }
 
@@ -238,3 +241,4 @@ export class CasaController {
     }
   }
 }
+

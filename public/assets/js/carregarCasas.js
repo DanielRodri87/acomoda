@@ -1,49 +1,67 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     // Função para buscar casas da API
     async function buscarCasas() {
         try {
-            console.log('Buscando casas da API...');
-            const response = await fetch('/api/casas');
+            console.log("Buscando casas da API...");
+            const response = await fetch("/api/casas");
             if (!response.ok) {
-                throw new Error('Falha ao carregar casas');
+                // Tenta ler a mensagem de erro do corpo da resposta, se houver
+                let errorMsg = `Erro HTTP ${response.status}: ${response.statusText}`;
+                try {
+                    const errorData = await response.json();
+                    if (errorData && errorData.message) {
+                        errorMsg = errorData.message;
+                    }
+                } catch (jsonError) {
+                    // Ignora erro ao parsear JSON, mantém a mensagem original
+                }
+                throw new Error(errorMsg);
             }
-            const data = await response.json();
-            console.log('Casas recebidas:', data);
-            
-            // Verificar a estrutura da resposta
-            if (data && Array.isArray(data.data)) {
-                return data.data; // Se a API retorna { data: [...casas] }
-            } else if (Array.isArray(data)) {
-                return data; // Se a API retorna diretamente [...casas]
+            const result = await response.json();
+            console.log("Casas recebidas:", result);
+
+            // Verificar a estrutura da resposta (considerando que pode ser { success: true, data: [...] })
+            if (result && result.success && Array.isArray(result.data)) {
+                return result.data; // Retorna o array de casas
+            } else if (Array.isArray(result)) {
+                 // Caso a API retorne diretamente o array (menos comum com NestJS)
+                 console.warn("API retornou um array diretamente. Verifique se este é o comportamento esperado.");
+                 return result;
             } else {
-                console.error('Formato de resposta inesperado:', data);
-                return [];
+                console.error("Formato de resposta inesperado ou falha na API:", result);
+                 // Lança um erro se a estrutura não for a esperada ou success for false
+                 throw new Error(result.message || "Formato de resposta inesperado da API.");
             }
         } catch (error) {
-            console.error('Erro ao buscar casas:', error);
-            return [];
+            console.error("Erro ao buscar casas:", error);
+            // Propaga o erro para ser tratado na função que chama
+            throw error; 
         }
     }
 
-    // Função para criar um card de casa
+    // Função para criar um card de casa (mantida como no seu original)
     function criarCardCasa(casa) {
-        // Criar elemento do card
-        const card = document.createElement('div');
-        card.className = 'accommodation-card';
-        
-        // Formatar valor para moeda brasileira
-        const valorFormatado = new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
+        const card = document.createElement("div");
+        card.className = "accommodation-card";
+
+        const valorFormatado = new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL"
         }).format(casa.valor);
 
-        // Extrair informações da descrição
+        // Função auxiliar para extrair detalhes (mantida como no seu original)
+        function extrairInfoQuartos(descricao) {
+            if (descricao && descricao.length > 50) {
+                return descricao.substring(0, 50) + "...";
+            }
+            return descricao || "Informações não disponíveis";
+        }
         const infoQuartos = extrairInfoQuartos(casa.descricao);
-        
+
         card.innerHTML = `
             <div class="image-info">
                 <a href="home+.html?id=${casa.idCasa}">
-                    <img src="${casa.fotoPrincipal}" alt="${casa.nome}">
+                    <img src="${casa.fotoPrincipal || '../assets/images/placeholder-casa.png'}" alt="${casa.nome}">
                 </a>
             </div>
             <div class="accommodation-info">
@@ -52,102 +70,81 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="price">${valorFormatado} <span style="font-size: 12px;">${casa.observacao || ''}</span></div>
             </div>
         `;
-        
+
         return card;
-    }
-    
-    // Função auxiliar para extrair detalhes de quartos da descrição
-    function extrairInfoQuartos(descricao) {
-        // Implementação simplificada - isso poderia ser melhorado
-        // para extrair informações estruturadas da descrição
-        if (descricao && descricao.length > 50) {
-            return descricao.substring(0, 50) + '...';
-        }
-        return descricao || 'Informações não disponíveis';
     }
 
     // Função principal para carregar e exibir casas
     async function carregarExibirCasas() {
-        const casas = await buscarCasas();
-        console.log('Total de casas encontradas:', casas.length);
-        
-        // Verificar se os containers existem
-        const republicasContainer = document.getElementById('republicas-container');
-        const individuaisContainer = document.getElementById('individuais-container');
-        
+        const republicasContainer = document.getElementById("republicas-container");
+        const individuaisContainer = document.getElementById("individuais-container");
+        const loadingRepublicas = document.getElementById("loading-republicas");
+        const loadingIndividuais = document.getElementById("loading-individuais");
+
+        // Garante que os containers existam antes de prosseguir
         if (!republicasContainer || !individuaisContainer) {
-            console.error('Containers não encontrados no DOM');
-            
-            // Tentativa de encontrar qualquer container de acomodação
-            const accommodationsContainers = document.querySelectorAll('.accommodations');
-            if (accommodationsContainers.length > 0) {
-                console.log('Encontrados containers alternativos:', accommodationsContainers.length);
-                
-                // Usar o primeiro container disponível
-                const container = accommodationsContainers[0];
-                
-                // Limpar o conteúdo original
-                container.innerHTML = '';
-                
-                // Exibir todas as casas no primeiro container
-                if (casas.length > 0) {
-                    casas.forEach(casa => {
-                        const card = criarCardCasa(casa);
-                        container.appendChild(card);
-                    });
-                } else {
-                    container.innerHTML = '<p>Nenhuma acomodação disponível no momento.</p>';
-                }
-            }
+            console.error("Erro crítico: Containers 'republicas-container' ou 'individuais-container' não encontrados no DOM.");
+            // Poderia exibir uma mensagem de erro geral na página aqui
             return;
         }
-        
-        // Se os containers existirem, continuar com a lógica original
-        // Tentar remover mensagens de carregamento se existirem
-        const loadingRepublicas = document.getElementById('loading-republicas');
-        const loadingIndividuais = document.getElementById('loading-individuais');
-        
-        if (loadingRepublicas) loadingRepublicas.style.display = 'none';
-        if (loadingIndividuais) loadingIndividuais.style.display = 'none';
-        
-        // Limpar os containers antes de adicionar novos cards
+
+        // Limpa containers e exibe loading inicial
         republicasContainer.innerHTML = '';
         individuaisContainer.innerHTML = '';
-        
-        // Contadores para estatísticas
-        let contRepublicas = 0;
-        let contIndividuais = 0;
-        
-        casas.forEach(casa => {
-            // Melhorar a lógica para separar os tipos de casa
-            // Considere palavras-chave ou padrões comuns na descrição
-            const isRepublica = casa.descricao && 
-                (casa.descricao.toLowerCase().includes('compartilhada') || 
-                 casa.descricao.toLowerCase().includes('república') ||
-                 casa.descricao.toLowerCase().includes('republica') ||
-                 casa.descricao.toLowerCase().includes('compartilhado') ||
-                 casa.descricao.toLowerCase().includes('estudantes'));
+        if (loadingRepublicas) loadingRepublicas.style.display = 'block';
+        if (loadingIndividuais) loadingIndividuais.style.display = 'block';
+
+        try {
+            const casas = await buscarCasas();
+            console.log("Total de casas encontradas:", casas.length);
+
+            // Remove os indicadores de carregamento após buscar os dados
+            if (loadingRepublicas) loadingRepublicas.style.display = 'none';
+            if (loadingIndividuais) loadingIndividuais.style.display = 'none';
+
+            let contRepublicas = 0;
+            let contIndividuais = 0;
+
+            casas.forEach(casa => {
+                const card = criarCardCasa(casa);
+                
+                // *** LÓGICA DE SEPARAÇÃO ATUALIZADA PARA USAR O CAMPO 'tipo' ***
+                if (casa.tipo === "República Universitária") {
+                    republicasContainer.appendChild(card);
+                    contRepublicas++;
+                } else if (casa.tipo === "Solitário") {
+                    individuaisContainer.appendChild(card);
+                    contIndividuais++;
+                } else {
+                    // Opcional: Logar casas com tipo inesperado ou não definido
+                    console.warn(`Casa ID ${casa.idCasa} com tipo inesperado ou não definido:`, casa.tipo);
+                    // Poderia adicionar a um container 'outros' se existisse
+                }
+            });
+
+            console.log(`Casas exibidas: ${contRepublicas} repúblicas, ${contIndividuais} individuais`);
+
+            // Exibe mensagem se nenhuma casa for encontrada em uma seção
+            if (contRepublicas === 0) {
+                republicasContainer.innerHTML = '<p class="no-results">Nenhuma república universitária encontrada.</p>';
+            }
+            if (contIndividuais === 0) {
+                individuaisContainer.innerHTML = '<p class="no-results">Nenhuma acomodação para solitários encontrada.</p>';
+            }
+
+        } catch (error) {
+            console.error("Erro final ao carregar e exibir casas:", error);
+            // Remove loading e exibe mensagem de erro nos containers
+            if (loadingRepublicas) loadingRepublicas.style.display = 'none';
+            if (loadingIndividuais) loadingIndividuais.style.display = 'none';
             
-            const container = isRepublica ? republicasContainer : individuaisContainer;
-            const card = criarCardCasa(casa);
-            container.appendChild(card);
-            
-            // Incrementar contadores
-            isRepublica ? contRepublicas++ : contIndividuais++;
-        });
-        
-        console.log(`Casas exibidas: ${contRepublicas} repúblicas, ${contIndividuais} individuais`);
-        
-        // Se não houver casas, mostrar mensagem
-        if (contRepublicas === 0) {
-            republicasContainer.innerHTML = '<p>Nenhuma república disponível no momento.</p>';
-        }
-        
-        if (contIndividuais === 0) {
-            individuaisContainer.innerHTML = '<p>Nenhuma acomodação individual disponível no momento.</p>';
+            const errorMessage = `<p class="error-message">Erro ao carregar acomodações: ${error.message}. Tente recarregar a página.</p>`;
+            republicasContainer.innerHTML = errorMessage;
+            individuaisContainer.innerHTML = errorMessage;
         }
     }
-    
+
     // Iniciar o carregamento das casas
     carregarExibirCasas();
 });
+

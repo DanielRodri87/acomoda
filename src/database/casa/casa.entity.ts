@@ -30,6 +30,20 @@ export class Casa {
 
   @OneToMany(() => FotoCasa, fotoCasa => fotoCasa.casa)
   fotos: FotoCasa[];
+
+  @Column({ 
+    type: 'enum',
+    enum: ['Ocupada', 'Desocupada'],
+    default: 'Desocupada'
+  })
+  status: string;
+
+  @Column({ 
+    type: 'enum',
+    enum: ['República Universitária', 'Solitário'],
+    default: 'Solitário'
+  })
+  tipo: string;
 }
 
 @Entity('fotos_casa')

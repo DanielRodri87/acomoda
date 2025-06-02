@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

@@ -11,6 +11,9 @@ npm install --save express
 
 npm install --save @types/express
 
+npm install bcrypt nodemailer @types/bcrypt @types/nodemailer
+
+
 2. Instalar e configurar o PostGreSQL
 
 sudo -i -u postgres

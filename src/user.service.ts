@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './database/user/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -34,6 +35,31 @@ export class UserService {
     } catch (error) {
       console.error('Erro ao buscar usuário pelo username:', error);
       return null;
+    }
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email: email },
+      });
+      return user;
+    } catch (error) {
+      console.error('Erro ao buscar usuário pelo email:', error);
+      return null;
+    }
+  }
+
+  async updatePassword(email: string, newPassword: string): Promise<void> {
+    try {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await this.userRepository.update(
+        { email: email },
+        { senha: hashedPassword }
+      );
+    } catch (error) {
+      console.error('Erro ao atualizar senha:', error);
+      throw new Error('Erro ao atualizar senha');
     }
   }
 

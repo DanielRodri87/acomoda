@@ -9,6 +9,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { EmailController } from './email/email.controller';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { AuthController } from './auth.controller';
     }),
     TypeOrmModule.forFeature([Casa, FotoCasa, User]),
   ],
-  controllers: [AppController, UserController, AuthController, CasaController],
-  providers: [AppService, UserService, AuthService],
+  controllers: [AppController, UserController, AuthController, CasaController, EmailController],
+  providers: [AppService, UserService, AuthService, EmailService],
 })
 export class AppModule {}

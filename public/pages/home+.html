@@ -444,92 +444,142 @@
         // Obter o nome do usuário atual do span existente
         const userFirstName = document.getElementById('user-first-name').textContent || 'Usuário';
         
-        // Remover o listener de evento antigo e adicionar um novo unificado
-        commentForm.addEventListener('submit', function(event) {
+        // Obter o ID da casa da URL para os comentários
+        const urlParams = new URLSearchParams(window.location.search);
+        const casaId = urlParams.get('id');
+        
+        // Carregar os comentários existentes do banco de dados quando a página carregar
+        async function carregarComentarios() {
+            if (!casaId) return;
+            
+            try {
+                // Limpar o container de comentários exceto pelo formulário principal
+                commentsContainer.innerHTML = '';
+                
+                const response = await fetch(`/api/comentarios/casa/${casaId}`);
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar comentários');
+                }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.mensagem || 'Erro ao buscar comentários');
+                }
+                
+                // Verificar se há comentários
+                if (!data.comentarios || data.comentarios.length === 0) {
+                    commentsContainer.innerHTML = '<p class="no-comments">Seja o primeiro a comentar!</p>';
+                    return;
+                }
+                
+                // Adicionar cada comentário ao container
+                data.comentarios.forEach(comentario => {
+                    // Criar o elemento de comentário
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment-box';
+                    commentElement.setAttribute('data-comment-id', comentario.idComentario);
+                    
+                    // Nome completo do usuário
+                    const nomeUsuario = `${comentario.usuario.primeiro_nome || ''} ${comentario.usuario.segundo_nome || ''}`.trim();
+                    
+                    commentElement.innerHTML = `
+                        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+                        <div class="comment-content">
+                            <p><b>${nomeUsuario}</b></p>
+                            <p>${comentario.textoComentario}</p>
+                            <div class="comment-actions">
+                                <button class="reply-button">Responder</button>
+                            </div>
+                            <div class="reply-form-container" style="display: none;">
+                                <form class="reply-form">
+                                    <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
+                                    <div class="reply-form-actions">
+                                        <button type="button" class="cancel-reply">Cancelar</button>
+                                        <button type="submit" class="send-reply">Responder</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                    
+                    commentsContainer.appendChild(commentElement);
+                    
+                    // Se o comentário tem uma resposta, adicioná-la também
+                    if (comentario.resposta) {
+                        const respostaNomeUsuario = `${comentario.resposta.usuario.primeiro_nome || ''} ${comentario.resposta.usuario.segundo_nome || ''}`.trim();
+                        
+                        const responseElement = document.createElement('div');
+                        responseElement.className = 'response-box';
+                        responseElement.innerHTML = `
+                            <div class="arrow"></div>
+                            <div class="response-content">
+                                <p class="responder-name"><b>${respostaNomeUsuario}</b></p>
+                                <p>${comentario.resposta.resposta}</p>
+                            </div>
+                        `;
+                        
+                        commentsContainer.appendChild(responseElement);
+                    }
+                });
+                
+                // Configurar os eventos para os botões de resposta
+                setupReplyEvents();
+            } catch (error) {
+                console.error('Erro ao carregar comentários:', error);
+                commentsContainer.innerHTML = '<p class="error-message">Erro ao carregar comentários. Por favor, tente novamente.</p>';
+            }
+        }
+        
+        // Carregar os comentários quando a página carregar
+        carregarComentarios();
+        
+        // Formulário de envio de comentário
+        commentForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             
             const commentText = commentInput.value.trim();
             if (!commentText) return; // Não enviar comentários vazios
             
-            // Criar novo elemento de comentário com a estrutura completa
-            const newComment = document.createElement('div');
-            newComment.className = 'comment-box';
-            newComment.setAttribute('data-comment-id', Date.now()); // ID único baseado no timestamp
-            newComment.innerHTML = `
-                <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-                <div class="comment-content">
-                    <p><b>${userFirstName}</b></p>
-                    <p>${commentText}</p>
-                    <div class="comment-actions">
-                        <button class="reply-button">Responder</button>
-                    </div>
-                    <div class="reply-form-container" style="display: none;">
-                        <form class="reply-form">
-                            <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
-                            <div class="reply-form-actions">
-                                <button type="button" class="cancel-reply">Cancelar</button>
-                                <button type="submit" class="send-reply">Responder</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-            
-            // Adicionar o novo comentário ao início do container
-            commentsContainer.insertBefore(newComment, commentsContainer.firstChild);
-            
-            // Limpar o campo de comentário
-            commentInput.value = '';
-            
-            // Configurar eventos para o novo comentário
-            setupReplyEvents();
-            
-            // Aqui você poderia adicionar código para salvar o comentário via API
-            // Por exemplo: salvarComentario(casaId, userId, commentText);
-        });
-        
-        // Adicionar botões de resposta a todos os comentários existentes
-        function initializeReplyButtons() {
-            // Selecionar todos os comentários existentes
-            const allComments = document.querySelectorAll('.comment-box');
-            
-            allComments.forEach(comment => {
-                // Verificar se já existe um botão de resposta
-                if (!comment.querySelector('.reply-button')) {
-                    // Criar o botão de resposta se não existir
-                    const actionDiv = document.createElement('div');
-                    actionDiv.className = 'comment-actions';
-                    
-                    const replyButton = document.createElement('button');
-                    replyButton.className = 'reply-button';
-                    replyButton.textContent = 'Responder';
-                    actionDiv.appendChild(replyButton);
-                    
-                    // Criar o container para o formulário de resposta
-                    const replyFormContainer = document.createElement('div');
-                    replyFormContainer.className = 'reply-form-container';
-                    replyFormContainer.style.display = 'none';
-                    
-                    // Criar o formulário de resposta
-                    replyFormContainer.innerHTML = `
-                        <form class="reply-form">
-                            <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
-                            <div class="reply-form-actions">
-                                <button type="button" class="cancel-reply">Cancelar</button>
-                                <button type="submit" class="send-reply">Responder</button>
-                            </div>
-                        </form>
-                    `;
-                    
-                    // Adicionar elementos ao comentário
-                    comment.querySelector('.comment-content').appendChild(actionDiv);
-                    comment.querySelector('.comment-content').appendChild(replyFormContainer);
+            try {
+                // Obter o ID do usuário diretamente da variável global do usuário logado
+                // que é carregada pelo buscaruser.js
+                const userId = await obterUsuarioLogado();
+                
+                console.log("Usuário identificado:", userId);
+                
+                // Enviar o comentário para a API
+                const response = await fetch('/api/comentarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idCasa: casaId,
+                        user: userId,
+                        textoComentario: commentText
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Falha ao enviar comentário');
                 }
-            });
-            
-            // Configurar eventos para os botões de resposta
-            setupReplyEvents();
-        }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.mensagem || 'Erro ao enviar comentário');
+                }
+                
+                // Limpar o campo de comentário
+                commentInput.value = '';
+                
+                // Recarregar os comentários para mostrar o novo comentário
+                carregarComentarios();
+                
+            } catch (error) {
+                console.error('Erro ao enviar comentário:', error);
+                alert('Erro ao enviar comentário: ' + error.message);
+            }
+        });
         
         // Configurar eventos para os botões de resposta
         function setupReplyEvents() {
@@ -558,7 +608,7 @@
             
             // Formulário de envio de resposta
             document.querySelectorAll('.reply-form').forEach(form => {
-                form.addEventListener('submit', function(event) {
+                form.addEventListener('submit', async function(event) {
                     event.preventDefault();
                     
                     // Obter o texto da resposta
@@ -567,38 +617,93 @@
                     
                     // Obter o comentário ao qual está respondendo
                     const commentBox = this.closest('.comment-box');
+                    const commentId = commentBox.getAttribute('data-comment-id');
                     
-                    // Obter o nome do usuário atual do span existente
-                    const responderName = document.getElementById('user-first-name').textContent || 'Usuário';
-                    
-                    // Criar a resposta com o nome do respondente
-                    const responseBox = document.createElement('div');
-                    responseBox.className = 'response-box';
-                    responseBox.innerHTML = `
-                        <div class="arrow"></div>
-                        <div class="response-content">
-                            <p class="responder-name"><b>${responderName}</b></p>
-                            <p>${replyText}</p>
-                        </div>
-                    `;
-                    
-                    // Adicionar a resposta após o comentário
-                    commentBox.after(responseBox);
-                    
-                    // Ocultar o formulário de resposta
-                    this.closest('.reply-form-container').style.display = 'none';
-                    
-                    // Limpar o campo de texto
-                    this.querySelector('.reply-input').value = '';
-                    
-                    // Aqui você pode adicionar código para salvar a resposta via API
-                    // Ex: salvarResposta(casaId, userId, commentId, replyText);
+                    try {
+                        // Obter o ID do usuário da mesma forma
+                        const userId = await obterUsuarioLogado();
+                        
+                        // Enviar a resposta para a API
+                        const response = await fetch('/api/respostas', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                idComentario: commentId,
+                                user: userId,
+                                resposta: replyText
+                            }),
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Falha ao enviar resposta');
+                        }
+                        
+                        const data = await response.json();
+                        if (!data.success) {
+                            throw new Error(data.mensagem || 'Erro ao enviar resposta');
+                        }
+                        
+                        // Ocultar o formulário de resposta
+                        this.closest('.reply-form-container').style.display = 'none';
+                        
+                        // Limpar o campo de texto
+                        this.querySelector('.reply-input').value = '';
+                        
+                        // Recarregar os comentários para mostrar a nova resposta
+                        carregarComentarios();
+                        
+                    } catch (error) {
+                        console.error('Erro ao enviar resposta:', error);
+                        alert('Erro ao enviar resposta: ' + error.message);
+                    }
                 });
             });
         }
         
-        // Inicializar os botões de resposta
-        initializeReplyButtons();
+        // Função simplificada que busca o usuário diretamente do localStorage onde o login o salva
+        async function obterUsuarioLogado() {
+            try {
+                // Estratégia 1: Buscar no localStorage onde o index.html salva ao fazer login
+                const userData = localStorage.getItem('userData');
+                if (userData) {
+                    try {
+                        const userObj = JSON.parse(userData);
+                        console.log("Dados do usuário encontrados:", userObj);
+                        // Retorna o campo "user" que é a PK na tabela de usuários
+                        if (userObj && userObj.user) {
+                            console.log("ID do usuário para comentários:", userObj.user);
+                            return userObj.user;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao parsear userData:", e);
+                    }
+                }
+                
+                // Se não encontrou no localStorage, tentar ainda o sessionStorage como fallback
+                const userSessionData = sessionStorage.getItem('user');
+                if (userSessionData) {
+                    try {
+                        const userObj = JSON.parse(userSessionData);
+                        if (userObj && userObj.user) {
+                            console.log("Usando user do sessionStorage:", userObj.user);
+                            return userObj.user;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao parsear dados do sessionStorage:", e);
+                    }
+                }
+                
+                // Em último caso, usar um valor fixo para fins de teste
+                console.warn("⚠️ Usando ID de usuário fixo 'naldo' para testes. Remova em produção!");
+                return "naldo"; // Usuário fixo como último recurso
+                
+            } catch (e) {
+                console.error("Erro ao obter usuário logado:", e);
+                return "naldo"; // Valor de fallback
+            }
+        }
     });
 
     // Remova o segundo event listener do DOMContentLoaded para evitar duplicação

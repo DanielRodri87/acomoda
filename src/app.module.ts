@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { EmailController } from './email/email.controller';
 import { EmailService } from './email/email.service';
+import { ComentariosModule } from './comentarios/comentarios.module';
 
 @Module({
   imports: [
@@ -23,8 +24,14 @@ import { EmailService } from './email/email.service';
       database: 'bancodados',
       autoLoadEntities: true,
       synchronize: true, // apenas em desenvolvimento
+      entities: [
+        User,
+        Casa,
+        FotoCasa,
+      ],
     }),
     TypeOrmModule.forFeature([Casa, FotoCasa, User]),
+    ComentariosModule
   ],
   controllers: [AppController, UserController, AuthController, CasaController, EmailController],
   providers: [AppService, UserService, AuthService, EmailService],

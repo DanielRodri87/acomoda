@@ -87,6 +87,13 @@ html, body {
     gap: 1%;            
 }
 
+.perfil img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .info {
     text-align: left; 
     max-width: 32.75em; 
@@ -123,7 +130,7 @@ html, body {
     background-color: #764a1f;
 }
 
-.card_direito img {
+.card_direito img:not(#dev-photo) {
     height: auto;
     align-self: center; 
 }

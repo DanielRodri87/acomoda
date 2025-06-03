@@ -79,55 +79,72 @@
           <img src="../assets/images/home+/baloes-de-fala 1.png" alt="Imagem Esquerda">
         </div>
         <div class="square-right">
-            <p class="square-text">Digite seu comentário</p>
+            <form id="comment-form">
+                <textarea id="comment-input" placeholder="Digite seu comentário ou dúvida aqui..." required></textarea>
+                <button type="submit" id="send-comment">Enviar</button>
+            </form>
         </div>
-      </div>
+    </div>
       
-      <div class="comment-box">
-        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-        <div class="comment-content">
-            <p><b>Luis Gustavo</b></p>
-            <p>Tem como deixar esse primeiro comentário em negrito e o segundo embaixo do primeiro, como uma pergunta?</p>
+    <div id="comments-container">
+        <!-- Comentários existentes -->
+        <div class="comment-box" data-comment-id="1">
+            <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+            <div class="comment-content">
+                <p><b>Luis Gustavo</b></p>
+                <p>Tem como deixar esse primeiro comentário em negrito e o segundo embaixo do primeiro, como uma pergunta?</p>
+                <div class="comment-actions">
+                    <button class="reply-button">Responder</button>
+                </div>
+                <!-- Área para o formulário de resposta que ficará inicialmente oculta -->
+                <div class="reply-form-container" style="display: none;">
+                    <form class="reply-form">
+                        <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
+                        <div class="reply-form-actions">
+                            <button type="button" class="cancel-reply">Cancelar</button>
+                            <button type="submit" class="send-reply">Responder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="response-box">
-        <div class="arrow"></div>
-        <div class="response-content">
-            <p>Sim, isso é possível com HTML e CSS!</p>
+        <div class="response-box">
+            <div class="arrow"></div>
+            <div class="response-content">
+                <p class="responder-name"><b>Proprietário</b></p>
+                <p>Sim, isso é possível com HTML e CSS!</p>
+            </div>
         </div>
-    </div>
 
-    <div class="comment-box">
-        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-        <div class="comment-content">
-            <p><b>Luis Gustavo</b></p>
-            <p>Tem gente chata morando?</p>
+        <div class="comment-box">
+            <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+            <div class="comment-content">
+                <p><b>Luis Gustavo</b></p>
+                <p>Tem gente chata morando?</p>
+            </div>
+        </div>
+        <div class="response-box">
+            <div class="arrow"></div>
+            <div class="response-content">
+                <p class="responder-name"><b>Proprietário</b></p>
+                <p>Tem não, confia!</p>
+            </div>
+        </div>
+        <div class="comment-box">
+            <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+            <div class="comment-content">
+                <p><b>Luis Gustavo</b></p>
+                <p>Ja roubaram alguém nesse estabelecimento?</p>
+            </div>
+        </div>
+        <div class="response-box">
+            <div class="arrow"></div>
+            <div class="response-content">
+                <p>Ainda não, veremos!</p>
+            </div>
         </div>
     </div>
-    <div class="response-box">
-        <div class="arrow"></div>
-        <div class="response-content">
-            <p>Tem não, confia!</p>
-        </div>
-    </div>
-    <div class="comment-box">
-        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-        <div class="comment-content">
-            <p><b>Luis Gustavo</b></p>
-            <p>Ja roubaram alguém nesse estabelecimento?</p>
-        </div>
-    </div>
-    <div class="response-box">
-        <div class="arrow"></div>
-        <div class="response-content">
-            <p>Ainda não, veremos!</p>
-        </div>
-    </div>
-    
-
-    
-   
-    </section>
+</section>
 
 <!-- Modal para exibir contato do proprietário -->
 <div id="proprietario-modal" class="modal">
@@ -417,6 +434,174 @@
             alert('Não foi possível carregar as informações de contato do proprietário: ' + error.message);
         }
     }
+    
+    // Script para lidar com o envio de comentários
+    document.addEventListener('DOMContentLoaded', function() {
+        const commentForm = document.getElementById('comment-form');
+        const commentInput = document.getElementById('comment-input');
+        const commentsContainer = document.getElementById('comments-container');
+        
+        // Obter o nome do usuário atual do span existente
+        const userFirstName = document.getElementById('user-first-name').textContent || 'Usuário';
+        
+        // Remover o listener de evento antigo e adicionar um novo unificado
+        commentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const commentText = commentInput.value.trim();
+            if (!commentText) return; // Não enviar comentários vazios
+            
+            // Criar novo elemento de comentário com a estrutura completa
+            const newComment = document.createElement('div');
+            newComment.className = 'comment-box';
+            newComment.setAttribute('data-comment-id', Date.now()); // ID único baseado no timestamp
+            newComment.innerHTML = `
+                <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+                <div class="comment-content">
+                    <p><b>${userFirstName}</b></p>
+                    <p>${commentText}</p>
+                    <div class="comment-actions">
+                        <button class="reply-button">Responder</button>
+                    </div>
+                    <div class="reply-form-container" style="display: none;">
+                        <form class="reply-form">
+                            <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
+                            <div class="reply-form-actions">
+                                <button type="button" class="cancel-reply">Cancelar</button>
+                                <button type="submit" class="send-reply">Responder</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar o novo comentário ao início do container
+            commentsContainer.insertBefore(newComment, commentsContainer.firstChild);
+            
+            // Limpar o campo de comentário
+            commentInput.value = '';
+            
+            // Configurar eventos para o novo comentário
+            setupReplyEvents();
+            
+            // Aqui você poderia adicionar código para salvar o comentário via API
+            // Por exemplo: salvarComentario(casaId, userId, commentText);
+        });
+        
+        // Adicionar botões de resposta a todos os comentários existentes
+        function initializeReplyButtons() {
+            // Selecionar todos os comentários existentes
+            const allComments = document.querySelectorAll('.comment-box');
+            
+            allComments.forEach(comment => {
+                // Verificar se já existe um botão de resposta
+                if (!comment.querySelector('.reply-button')) {
+                    // Criar o botão de resposta se não existir
+                    const actionDiv = document.createElement('div');
+                    actionDiv.className = 'comment-actions';
+                    
+                    const replyButton = document.createElement('button');
+                    replyButton.className = 'reply-button';
+                    replyButton.textContent = 'Responder';
+                    actionDiv.appendChild(replyButton);
+                    
+                    // Criar o container para o formulário de resposta
+                    const replyFormContainer = document.createElement('div');
+                    replyFormContainer.className = 'reply-form-container';
+                    replyFormContainer.style.display = 'none';
+                    
+                    // Criar o formulário de resposta
+                    replyFormContainer.innerHTML = `
+                        <form class="reply-form">
+                            <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
+                            <div class="reply-form-actions">
+                                <button type="button" class="cancel-reply">Cancelar</button>
+                                <button type="submit" class="send-reply">Responder</button>
+                            </div>
+                        </form>
+                    `;
+                    
+                    // Adicionar elementos ao comentário
+                    comment.querySelector('.comment-content').appendChild(actionDiv);
+                    comment.querySelector('.comment-content').appendChild(replyFormContainer);
+                }
+            });
+            
+            // Configurar eventos para os botões de resposta
+            setupReplyEvents();
+        }
+        
+        // Configurar eventos para os botões de resposta
+        function setupReplyEvents() {
+            // Botão de responder
+            document.querySelectorAll('.reply-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Ocultar todos os formulários de resposta abertos
+                    document.querySelectorAll('.reply-form-container').forEach(form => {
+                        form.style.display = 'none';
+                    });
+                    
+                    // Exibir o formulário de resposta para este comentário
+                    const replyForm = this.closest('.comment-content').querySelector('.reply-form-container');
+                    replyForm.style.display = 'block';
+                    replyForm.querySelector('textarea').focus();
+                });
+            });
+            
+            // Botão de cancelar resposta
+            document.querySelectorAll('.cancel-reply').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Ocultar o formulário de resposta
+                    this.closest('.reply-form-container').style.display = 'none';
+                });
+            });
+            
+            // Formulário de envio de resposta
+            document.querySelectorAll('.reply-form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Obter o texto da resposta
+                    const replyText = this.querySelector('.reply-input').value.trim();
+                    if (!replyText) return;
+                    
+                    // Obter o comentário ao qual está respondendo
+                    const commentBox = this.closest('.comment-box');
+                    
+                    // Obter o nome do usuário atual do span existente
+                    const responderName = document.getElementById('user-first-name').textContent || 'Usuário';
+                    
+                    // Criar a resposta com o nome do respondente
+                    const responseBox = document.createElement('div');
+                    responseBox.className = 'response-box';
+                    responseBox.innerHTML = `
+                        <div class="arrow"></div>
+                        <div class="response-content">
+                            <p class="responder-name"><b>${responderName}</b></p>
+                            <p>${replyText}</p>
+                        </div>
+                    `;
+                    
+                    // Adicionar a resposta após o comentário
+                    commentBox.after(responseBox);
+                    
+                    // Ocultar o formulário de resposta
+                    this.closest('.reply-form-container').style.display = 'none';
+                    
+                    // Limpar o campo de texto
+                    this.querySelector('.reply-input').value = '';
+                    
+                    // Aqui você pode adicionar código para salvar a resposta via API
+                    // Ex: salvarResposta(casaId, userId, commentId, replyText);
+                });
+            });
+        }
+        
+        // Inicializar os botões de resposta
+        initializeReplyButtons();
+    });
+
+    // Remova o segundo event listener do DOMContentLoaded para evitar duplicação
 </script>
 
 <style>
@@ -463,6 +648,124 @@
 #proprietario-info p {
     margin: 10px 0;
     font-size: 16px;
+}
+
+/* Estilos para o formulário de comentários */
+#comment-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+#comment-input {
+    width: 100%;
+    height: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    font-family: inherit;
+    margin-bottom: 10px;
+}
+
+#send-comment {
+    align-self: flex-end;
+    background-color: #17468F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#send-comment:hover {
+    background-color: #0D2E5F;
+}
+
+.square-right {
+    padding: 15px;
+}
+
+/* Estilos para o sistema de resposta */
+.comment-actions {
+    margin-top: 8px;
+}
+
+.reply-button {
+    background-color: transparent;
+    border: 1px solid #17468F;
+    color: #17468F;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.reply-button:hover {
+    background-color: #f0f7ff;
+}
+
+.reply-form-container {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.reply-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.reply-input {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 8px;
+    font-family: inherit;
+}
+
+.reply-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-reply {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.send-reply {
+    background-color: #17468F;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.send-reply:hover {
+    background-color: #0D2E5F;
+}
+
+/* Estilo para o nome do respondente */
+.responder-name {
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #333;
 }
 </style>
 

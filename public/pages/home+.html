@@ -79,55 +79,72 @@
           <img src="../assets/images/home+/baloes-de-fala 1.png" alt="Imagem Esquerda">
         </div>
         <div class="square-right">
-            <p class="square-text">Digite seu comentário</p>
+            <form id="comment-form">
+                <textarea id="comment-input" placeholder="Digite seu comentário ou dúvida aqui..." required></textarea>
+                <button type="submit" id="send-comment">Enviar</button>
+            </form>
         </div>
-      </div>
+    </div>
       
-      <div class="comment-box">
-        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-        <div class="comment-content">
-            <p><b>Luis Gustavo</b></p>
-            <p>Tem como deixar esse primeiro comentário em negrito e o segundo embaixo do primeiro, como uma pergunta?</p>
+    <div id="comments-container">
+        <!-- Comentários existentes -->
+        <div class="comment-box" data-comment-id="1">
+            <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+            <div class="comment-content">
+                <p><b>Luis Gustavo</b></p>
+                <p>Tem como deixar esse primeiro comentário em negrito e o segundo embaixo do primeiro, como uma pergunta?</p>
+                <div class="comment-actions">
+                    <button class="reply-button">Responder</button>
+                </div>
+                <!-- Área para o formulário de resposta que ficará inicialmente oculta -->
+                <div class="reply-form-container" style="display: none;">
+                    <form class="reply-form">
+                        <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
+                        <div class="reply-form-actions">
+                            <button type="button" class="cancel-reply">Cancelar</button>
+                            <button type="submit" class="send-reply">Responder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="response-box">
-        <div class="arrow"></div>
-        <div class="response-content">
-            <p>Sim, isso é possível com HTML e CSS!</p>
+        <div class="response-box">
+            <div class="arrow"></div>
+            <div class="response-content">
+                <p class="responder-name"><b>Proprietário</b></p>
+                <p>Sim, isso é possível com HTML e CSS!</p>
+            </div>
         </div>
-    </div>
 
-    <div class="comment-box">
-        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-        <div class="comment-content">
-            <p><b>Luis Gustavo</b></p>
-            <p>Tem gente chata morando?</p>
+        <div class="comment-box">
+            <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+            <div class="comment-content">
+                <p><b>Luis Gustavo</b></p>
+                <p>Tem gente chata morando?</p>
+            </div>
+        </div>
+        <div class="response-box">
+            <div class="arrow"></div>
+            <div class="response-content">
+                <p class="responder-name"><b>Proprietário</b></p>
+                <p>Tem não, confia!</p>
+            </div>
+        </div>
+        <div class="comment-box">
+            <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+            <div class="comment-content">
+                <p><b>Luis Gustavo</b></p>
+                <p>Ja roubaram alguém nesse estabelecimento?</p>
+            </div>
+        </div>
+        <div class="response-box">
+            <div class="arrow"></div>
+            <div class="response-content">
+                <p>Ainda não, veremos!</p>
+            </div>
         </div>
     </div>
-    <div class="response-box">
-        <div class="arrow"></div>
-        <div class="response-content">
-            <p>Tem não, confia!</p>
-        </div>
-    </div>
-    <div class="comment-box">
-        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
-        <div class="comment-content">
-            <p><b>Luis Gustavo</b></p>
-            <p>Ja roubaram alguém nesse estabelecimento?</p>
-        </div>
-    </div>
-    <div class="response-box">
-        <div class="arrow"></div>
-        <div class="response-content">
-            <p>Ainda não, veremos!</p>
-        </div>
-    </div>
-    
-
-    
-   
-    </section>
+</section>
 
 <!-- Modal para exibir contato do proprietário -->
 <div id="proprietario-modal" class="modal">
@@ -417,6 +434,279 @@
             alert('Não foi possível carregar as informações de contato do proprietário: ' + error.message);
         }
     }
+    
+    // Script para lidar com o envio de comentários
+    document.addEventListener('DOMContentLoaded', function() {
+        const commentForm = document.getElementById('comment-form');
+        const commentInput = document.getElementById('comment-input');
+        const commentsContainer = document.getElementById('comments-container');
+        
+        // Obter o nome do usuário atual do span existente
+        const userFirstName = document.getElementById('user-first-name').textContent || 'Usuário';
+        
+        // Obter o ID da casa da URL para os comentários
+        const urlParams = new URLSearchParams(window.location.search);
+        const casaId = urlParams.get('id');
+        
+        // Carregar os comentários existentes do banco de dados quando a página carregar
+        async function carregarComentarios() {
+            if (!casaId) return;
+            
+            try {
+                // Limpar o container de comentários exceto pelo formulário principal
+                commentsContainer.innerHTML = '';
+                
+                const response = await fetch(`/api/comentarios/casa/${casaId}`);
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar comentários');
+                }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.mensagem || 'Erro ao buscar comentários');
+                }
+                
+                // Verificar se há comentários
+                if (!data.comentarios || data.comentarios.length === 0) {
+                    commentsContainer.innerHTML = '<p class="no-comments">Seja o primeiro a comentar!</p>';
+                    return;
+                }
+                
+                // Adicionar cada comentário ao container
+                data.comentarios.forEach(comentario => {
+                    // Criar o elemento de comentário
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment-box';
+                    commentElement.setAttribute('data-comment-id', comentario.idComentario);
+                    
+                    // Nome completo do usuário
+                    const nomeUsuario = `${comentario.usuario.primeiro_nome || ''} ${comentario.usuario.segundo_nome || ''}`.trim();
+                    
+                    commentElement.innerHTML = `
+                        <img src="../assets/images/home+/1144760 10.png" alt="Ícone do Usuário" class="user-icon">
+                        <div class="comment-content">
+                            <p><b>${nomeUsuario}</b></p>
+                            <p>${comentario.textoComentario}</p>
+                            <div class="comment-actions">
+                                <button class="reply-button">Responder</button>
+                            </div>
+                            <div class="reply-form-container" style="display: none;">
+                                <form class="reply-form">
+                                    <textarea class="reply-input" placeholder="Digite sua resposta..." required></textarea>
+                                    <div class="reply-form-actions">
+                                        <button type="button" class="cancel-reply">Cancelar</button>
+                                        <button type="submit" class="send-reply">Responder</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                    
+                    commentsContainer.appendChild(commentElement);
+                    
+                    // Se o comentário tem uma resposta, adicioná-la também
+                    if (comentario.resposta) {
+                        const respostaNomeUsuario = `${comentario.resposta.usuario.primeiro_nome || ''} ${comentario.resposta.usuario.segundo_nome || ''}`.trim();
+                        
+                        const responseElement = document.createElement('div');
+                        responseElement.className = 'response-box';
+                        responseElement.innerHTML = `
+                            <div class="arrow"></div>
+                            <div class="response-content">
+                                <p class="responder-name"><b>${respostaNomeUsuario}</b></p>
+                                <p>${comentario.resposta.resposta}</p>
+                            </div>
+                        `;
+                        
+                        commentsContainer.appendChild(responseElement);
+                    }
+                });
+                
+                // Configurar os eventos para os botões de resposta
+                setupReplyEvents();
+            } catch (error) {
+                console.error('Erro ao carregar comentários:', error);
+                commentsContainer.innerHTML = '<p class="error-message">Erro ao carregar comentários. Por favor, tente novamente.</p>';
+            }
+        }
+        
+        // Carregar os comentários quando a página carregar
+        carregarComentarios();
+        
+        // Formulário de envio de comentário
+        commentForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const commentText = commentInput.value.trim();
+            if (!commentText) return; // Não enviar comentários vazios
+            
+            try {
+                // Obter o ID do usuário diretamente da variável global do usuário logado
+                // que é carregada pelo buscaruser.js
+                const userId = await obterUsuarioLogado();
+                
+                console.log("Usuário identificado:", userId);
+                
+                // Enviar o comentário para a API
+                const response = await fetch('/api/comentarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idCasa: casaId,
+                        user: userId,
+                        textoComentario: commentText
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Falha ao enviar comentário');
+                }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.mensagem || 'Erro ao enviar comentário');
+                }
+                
+                // Limpar o campo de comentário
+                commentInput.value = '';
+                
+                // Recarregar os comentários para mostrar o novo comentário
+                carregarComentarios();
+                
+            } catch (error) {
+                console.error('Erro ao enviar comentário:', error);
+                alert('Erro ao enviar comentário: ' + error.message);
+            }
+        });
+        
+        // Configurar eventos para os botões de resposta
+        function setupReplyEvents() {
+            // Botão de responder
+            document.querySelectorAll('.reply-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Ocultar todos os formulários de resposta abertos
+                    document.querySelectorAll('.reply-form-container').forEach(form => {
+                        form.style.display = 'none';
+                    });
+                    
+                    // Exibir o formulário de resposta para este comentário
+                    const replyForm = this.closest('.comment-content').querySelector('.reply-form-container');
+                    replyForm.style.display = 'block';
+                    replyForm.querySelector('textarea').focus();
+                });
+            });
+            
+            // Botão de cancelar resposta
+            document.querySelectorAll('.cancel-reply').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Ocultar o formulário de resposta
+                    this.closest('.reply-form-container').style.display = 'none';
+                });
+            });
+            
+            // Formulário de envio de resposta
+            document.querySelectorAll('.reply-form').forEach(form => {
+                form.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    
+                    // Obter o texto da resposta
+                    const replyText = this.querySelector('.reply-input').value.trim();
+                    if (!replyText) return;
+                    
+                    // Obter o comentário ao qual está respondendo
+                    const commentBox = this.closest('.comment-box');
+                    const commentId = commentBox.getAttribute('data-comment-id');
+                    
+                    try {
+                        // Obter o ID do usuário da mesma forma
+                        const userId = await obterUsuarioLogado();
+                        
+                        // Enviar a resposta para a API
+                        const response = await fetch('/api/respostas', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                idComentario: commentId,
+                                user: userId,
+                                resposta: replyText
+                            }),
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Falha ao enviar resposta');
+                        }
+                        
+                        const data = await response.json();
+                        if (!data.success) {
+                            throw new Error(data.mensagem || 'Erro ao enviar resposta');
+                        }
+                        
+                        // Ocultar o formulário de resposta
+                        this.closest('.reply-form-container').style.display = 'none';
+                        
+                        // Limpar o campo de texto
+                        this.querySelector('.reply-input').value = '';
+                        
+                        // Recarregar os comentários para mostrar a nova resposta
+                        carregarComentarios();
+                        
+                    } catch (error) {
+                        console.error('Erro ao enviar resposta:', error);
+                        alert('Erro ao enviar resposta: ' + error.message);
+                    }
+                });
+            });
+        }
+        
+        // Função simplificada que busca o usuário diretamente do localStorage onde o login o salva
+        async function obterUsuarioLogado() {
+            try {
+                // Estratégia 1: Buscar no localStorage onde o index.html salva ao fazer login
+                const userData = localStorage.getItem('userData');
+                if (userData) {
+                    try {
+                        const userObj = JSON.parse(userData);
+                        console.log("Dados do usuário encontrados:", userObj);
+                        // Retorna o campo "user" que é a PK na tabela de usuários
+                        if (userObj && userObj.user) {
+                            console.log("ID do usuário para comentários:", userObj.user);
+                            return userObj.user;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao parsear userData:", e);
+                    }
+                }
+                
+                // Se não encontrou no localStorage, tentar ainda o sessionStorage como fallback
+                const userSessionData = sessionStorage.getItem('user');
+                if (userSessionData) {
+                    try {
+                        const userObj = JSON.parse(userSessionData);
+                        if (userObj && userObj.user) {
+                            console.log("Usando user do sessionStorage:", userObj.user);
+                            return userObj.user;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao parsear dados do sessionStorage:", e);
+                    }
+                }
+                
+                // Em último caso, usar um valor fixo para fins de teste
+                console.warn("⚠️ Usando ID de usuário fixo 'naldo' para testes. Remova em produção!");
+                return "naldo"; // Usuário fixo como último recurso
+                
+            } catch (e) {
+                console.error("Erro ao obter usuário logado:", e);
+                return "naldo"; // Valor de fallback
+            }
+        }
+    });
+
+    // Remova o segundo event listener do DOMContentLoaded para evitar duplicação
 </script>
 
 <style>
@@ -463,6 +753,124 @@
 #proprietario-info p {
     margin: 10px 0;
     font-size: 16px;
+}
+
+/* Estilos para o formulário de comentários */
+#comment-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+#comment-input {
+    width: 100%;
+    height: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    font-family: inherit;
+    margin-bottom: 10px;
+}
+
+#send-comment {
+    align-self: flex-end;
+    background-color: #17468F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#send-comment:hover {
+    background-color: #0D2E5F;
+}
+
+.square-right {
+    padding: 15px;
+}
+
+/* Estilos para o sistema de resposta */
+.comment-actions {
+    margin-top: 8px;
+}
+
+.reply-button {
+    background-color: transparent;
+    border: 1px solid #17468F;
+    color: #17468F;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.reply-button:hover {
+    background-color: #f0f7ff;
+}
+
+.reply-form-container {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.reply-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.reply-input {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 8px;
+    font-family: inherit;
+}
+
+.reply-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-reply {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.send-reply {
+    background-color: #17468F;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.send-reply:hover {
+    background-color: #0D2E5F;
+}
+
+/* Estilo para o nome do respondente */
+.responder-name {
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #333;
 }
 </style>
 

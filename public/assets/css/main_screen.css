@@ -35,15 +35,44 @@ header {
 .search-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 15px;
     background-color: white;
-    border-radius: 50px; 
-    padding: 15px 25px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); 
+    border-radius: 50px;
+    padding: 10px 20px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
     margin-bottom: 50px;
-    padding-left: 3%;
-    width: 67%; 
+    width: 67%;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 8px;
+}
+
+.search-button {
+    background-color: #E19355;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: #d17f3f;
+}
+
+.search-button img {
+    width: 20px;
+    height: 20px;
 }
 
 .search-bar > div {
@@ -53,7 +82,9 @@ header {
     text-align: left;
 }
 
-
+.referencia, .distancia, .tipo, .avaliacao {
+    display: none;
+}
 
 .accommodation-section {
     margin-bottom: 40px;

@@ -184,26 +184,22 @@ header {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 17%; /* Largura reduzida para 25% da tela */
-
+    width: 22%; /* Increased from 17% to 22% */
     height: 100vh; /* Ocupa 100% da altura da tela */
-    padding: 20px;
+    padding: 30px 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     gap: 20px;
     border-radius: 0; /* Bordas retas */
     position: fixed;
     top: 0;
     right: 0;
-    margin: 0; /* Remove margens padrão */
-    
 }
 
 /* Estilo da imagem dentro da sobreposição */
 .overlay-content img {
-    width: 100%; /* Faz a imagem ocupar toda a largura disponível */
     height: auto;
     border-radius: 35px;
     margin-bottom: -10px; /* Espaçamento entre a imagem e o botão */
@@ -220,13 +216,11 @@ header {
     text-decoration: none;
     font-weight: bold;
     border-radius: 35px;
-    
     text-align: center;
     transition: background-color 0.3s ease;
     border: 2px solid #E19355;
     box-sizing: border-box;
 }
-
 
 .overlay-content .close-btn:hover {
     background-color: #b4693d;
@@ -391,7 +385,6 @@ input[type="range"]::-moz-range-thumb {
     opacity: 0.26; 
 }
 
-
 .image-info::after {
     content: url("../images/lupa-preta.png"); /* Caminho da imagem da lupa */
     position: absolute;
@@ -405,7 +398,6 @@ input[type="range"]::-moz-range-thumb {
 .image-info:hover::after {
     opacity: 1; /* Torna a lupa visível ao passar o mouse */
 }
-
 
 .accommodation-card img {
     width: 100%;
@@ -477,7 +469,7 @@ input[type="range"]::-moz-range-thumb {
 .perfil-infos {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Ajusta o alinhamento interno para o lado esquerdo */
+    align-items: center; /* Ajusta o alinhamento interno para o lado esquerdo */
 }
 
 .perfil-infos h1 {
@@ -509,9 +501,6 @@ input[type="range"]::-moz-range-thumb {
     z-index: 999;
 }
 
-
-
-
 /* Botão de sair (canto superior direito) */
 .perfil-editar img:last-child {
     position: absolute;
@@ -524,7 +513,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .botao-sair {
-    padding-left: 200px;
+    padding-left: 2px;
 }
 
 #divide {
@@ -532,24 +521,27 @@ input[type="range"]::-moz-range-thumb {
     width: 220px;
 }
 
-
-
 /* Divisores (linhas verdes) */
-.divisao img {
+.divisao {
     width: 100%;
-    height: 2px;
-    background-color: #00c853;
-    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
 }
 
-
+.divisao img {
+    width: 90%; /* Adjusted to maintain proper proportions with new width */
+    height: 2px;
+    background-color: #00c853;
+}
 
 .botoes-superior {
     display: flex;
     margin-top: -40px;
     margin-bottom: -30px;
     flex-direction: column;   /* Coloca os botões um abaixo do outro */
-    align-items: flex-start;  /* Alinha os botões no canto esquerdo */
+    align-items: left;  /* Alinha os botões no canto esquerdo */
     gap: 10px;                /* Espaço entre os botões */
     padding: 10px;            /* Espaço interno opcional */
     width: fit-content;       /* Ajusta o container ao conteúdo */
@@ -558,8 +550,8 @@ input[type="range"]::-moz-range-thumb {
 .botoes-superior {
     display: flex;
     flex-direction: column;   /* Um embaixo do outro */
-    align-items: flex-start;  /* Alinha à esquerda */
-    gap: 12px;
+    align-items: center;  /* Alinha à esquerda */
+    gap: 7px;
     padding: 10px;
     width: fit-content;
     margin-top: -40px;
@@ -569,7 +561,7 @@ input[type="range"]::-moz-range-thumb {
 .botao-superior {
     display: flex;
     align-items: center;
-    padding: 6px 8px;
+    padding: 6px 0;
     border-radius: 8px;
     background-color: transparent;
     cursor: pointer;
@@ -577,55 +569,157 @@ input[type="range"]::-moz-range-thumb {
     font-size: 14px;
     white-space: nowrap;
     width: 100%;
-    gap: 8px;  /* Espaço entre ícone e texto */
+}
+
+.botao-superior a {
+    margin-left: 5px;  /* Alinha com os outros itens */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.botao-superior img.icone-botao {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    min-width: 20px;
+    /* margin-left: 5px; */ /* Removido, usando gap no pai */
 }
 
 .botao-superior p {
-    margin: 0;
-    font-size: 10px;
+    /* margin-left: 10px; */ /* Removido, usando gap no pai */
+    margin: 0; /* Adicionado para remover margens padrão do parágrafo */
+    font-size: 12px;
     color: white;
     line-height: 1.2;
     white-space: nowrap;
 }
 
-.icone-botao {
-    width: 20px;   /* Ajuste aqui o tamanho padrão dos ícones */
-    height: 20px;
-    object-fit: contain;
+.botao-superior p a {
+    text-decoration: none;
+    color: inherit;
 }
 
-/* ################# */
+/* Ajuste da divisória e botão de sair */
+.divisao {
+    margin: -30px 0;  /* Mesmo espaçamento da divisória superior */
+}
 
+.botao-sair {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 5px;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+}
 
 .perfil-editar {
     position: relative; /* Container pai deve ser relativo */
     padding-left: 15px; /* Compensa o margin-left da imagem */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 20px;
+    margin-bottom: 15px;
 }
 
 .perfil-editar img:first-child {
-    width: 60px;
-    height: 60px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    position: absolute; /* Fixa a imagem */
-    left: -50px; /* Move para a esquerda */
-    top: -10px; /* Alinha verticalmente */
-    margin: 0; /* Remove margens padrão */
+    position: relative;
+    left: 0;
+    top: 0;
+    margin-bottom: 15px;
 }
+
 .perfil-nome {
     margin-bottom: 4px; /* reduz o espaço entre nome e e-mail */
-    font-size: 14px;
+    font-size: 20px;
     color: white;
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 .email {
-
-    font-size: 8px;
+    font-size: 15px;
     color: #ccc;
+    text-align: center;
 }
 
 .info-perfil {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.botoes-superior {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    /* gap: 7px; */
+    padding: 10px 0;
+    margin-top: 10px;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.botao-superior {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 6px 0;
+    padding: 8px 5px;
+    gap: 12px;
+    transition: background-color 0.3s;
+}
+
+.botao-superior:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.botao-sair {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 0;
+    margin-top: 15px;
+    padding-left: 5px;
+}
+
+.sair-btn img {
+    width: 85px;
+    transition: opacity 0.3s;
+}
+
+.sair-btn:hover img {
+    opacity: 0.8;
+}
+
+/* Estilo do botão Voltar */
+.voltar-btn {
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border: 1px solid white;
+    border-radius: 20px;
+    font-size: 14px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.voltar-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
 }
 

@@ -33,6 +33,8 @@
             <p id="overlay-user-email" class="email">Carregando@email.com...</p>
         </div>
 
+                <!-- Botão Voltar -->
+        <a href="#" class="voltar-btn">Voltar</a>
         <!-- Botão Fechar -->
         <a href="#" class="close-btn">X</a>
             </div>
@@ -45,10 +47,8 @@
         <!-- Botões Superiores -->
         <div class="botoes-superior">
             <div class="botao-superior">
-                <a href="../pages/locator.html" id="profile-link" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                    <img src="../assets/images/main_scream/Vector (1).png" class="icone-botao">
-                    <p>Seu Perfil</p>
-                </a>
+                <img src="../assets/images/main_scream/Vector (1).png" class="icone-botao">
+                <p><a href="../pages/locator.html" id="profile-link">Seu Perfil</a></p>
             </div>
             <div class="botao-superior">
                 <img src="../assets/images/main_scream/Vector (2).png" class="icone-botao">
@@ -71,7 +71,7 @@
                 <p>Idioma</p>
             </div>
             <div class="botao-superior">
-                <img src="../assets/images/main_scream/Ajuda.png" class="icone-botao">
+                <img src="../assets/images/main_scream/Ajuda.png" height="20px" width="20px" class="icone-botao">
                 <p>Ajuda</p>
             </div>
         </div> <!-- Fim dos botões superiores -->
@@ -82,9 +82,9 @@
         </div>
 
         <!-- Botão Sair -->
-        <div class="botao-sair">
+        <div class="botao-sair" id="sair">
             <a href="#" class="sair-btn" id="logout-btn">
-                <img src="../assets/images/main_scream/sair-perfil.png" alt="Sair">
+                <img src="../assets/images/main_scream/sair-perfil.png" width="200px" alt="Sair">
             </a>
         </div>
 
@@ -94,80 +94,15 @@
 </div>
 
 <div class="search-bar">
-    <div class="referencia">
-        <a href="#overlay">
-            <span><b>Referência</b></span>
-            <span>Do local</span>
-        </a>
-    </div>
-    <!-- Container de sobreposição -->
-    <div id="overlay" class="overlay">
-        <div class="overlay-content">
-            <!-- Imagem dentro da sobreposição -->
-            <img src="../assets/images/main_scream/image.png" alt="Imagem de referência" />
-
-            <!-- Elemento onde o mapa será renderizado (se necessário, pode ser removido caso não precise) -->
-            <div id="map"></div>
-
-            <!-- Botão de fechar -->
-            <a href="#" class="close-btn">Escolher no mapa</a>
-        </div>
-    </div>
-    <div class="distancia">
-        <a href="#overlay-distancia">
-            <span><b>Distância</b></span>
-            <span>Do raio</span>
-        </a>
-    </div>
-    
-    <!-- Container de sobreposição para a distância -->
-    <div id="overlay-distancia" class="overlay">
-        <div class="overlay-content">
-            <h2>Ajuste a distância</h2>
-            <div class="slider-container">
-                <span>0 km</span>
-                <input type="range" id="distance-slider" min="0" max="100" value="39" />
-                <span>100 km</span>
-            </div>
-            <p><b><span id="slider-value">39</span> km</b></p>
-            <a href="#" class="close-btn">Confirmar</a>
-        </div>
-    </div>
-
-    <!-- Script para controle do slider -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const slider = document.getElementById("distance-slider");
-            const sliderValue = document.getElementById("slider-value");
-
-            // Atualiza o valor dinâmico e o fundo do slider
-            slider.addEventListener("input", function () {
-                sliderValue.textContent = slider.value;
-                const percent = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
-                slider.style.background = `linear-gradient(to right, #E19355 ${percent}%, #dfdfdf ${percent}%)`;
-            });
-        });
-    </script>
-    <div class="tipo">
-        <a href="#overlay-distancia">
-            <span><b>Tipo</b></span>
-            <span>De acomodação</span>
-        </a>
-    </div>
-    
-    <div class="avaliacao">
-        <a href="#overlay-distancia">
-            <span><b>Avaliação</b></span>
-            <span>Em estrelas</span>
-        </a>
-    </div>
-
-
-    
-    <div class="botao">
-        <img src="../assets/images/main_scream/lupa-branca.png" alt="Lupa para pesquisas">
-    </div>
+    <input type="text" 
+           class="search-input" 
+           placeholder="Buscar por título da casa..."
+           id="search-input">
+    <button class="search-button" id="search-button">
+        <img src="../assets/images/main_scream/lupa-branca.png" alt="Buscar">
+    </button>
 </div>
+
 <div class="container">
     <section class="accommodation-section">
         <h2>Acomodações/repúblicas estudantis</h2>

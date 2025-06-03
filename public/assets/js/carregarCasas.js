@@ -65,6 +65,70 @@ document.addEventListener("DOMContentLoaded", () => {
         return card;
     }
 
+    let todasAsCasasCache = []; // Cache para armazenar todas as casas
+
+    // Função para filtrar casas por título
+    function filtrarCasasPorTitulo(casas, titulo) {
+        if (!titulo) return casas;
+        const termoBusca = titulo.toLowerCase();
+        return casas.filter(casa => 
+            casa.nome.toLowerCase().includes(termoBusca) &&
+            casa.status !== 'Ocupada'
+        );
+    }
+
+    // Função para atualizar a exibição das casas
+    function atualizarExibicaoCasas(casasFiltradas) {
+        const republicasContainer = document.getElementById("republicas-container");
+        const individuaisContainer = document.getElementById("individuais-container");
+
+        republicasContainer.innerHTML = '';
+        individuaisContainer.innerHTML = '';
+
+        let contRepublicas = 0;
+        let contIndividuais = 0;
+
+        casasFiltradas.forEach(casa => {
+            const card = criarCardCasa(casa);
+            if (casa.tipo === "República Universitária") {
+                republicasContainer.appendChild(card);
+                contRepublicas++;
+            } else if (casa.tipo === "Solitário") {
+                individuaisContainer.appendChild(card);
+                contIndividuais++;
+            }
+        });
+
+        if (contRepublicas === 0) {
+            republicasContainer.innerHTML = '<p class="no-results">Nenhuma república universitária encontrada.</p>';
+        }
+        if (contIndividuais === 0) {
+            individuaisContainer.innerHTML = '<p class="no-results">Nenhuma acomodação para solitários encontrada.</p>';
+        }
+    }
+
+    // Setup do evento de busca
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+
+    async function realizarBusca() {
+        const termoBusca = searchInput.value;
+        const casasFiltradas = filtrarCasasPorTitulo(todasAsCasasCache, termoBusca);
+        atualizarExibicaoCasas(casasFiltradas);
+    }
+
+    if (searchButton) {
+        searchButton.addEventListener('click', realizarBusca);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                realizarBusca();
+            }
+        });
+    }
+
     // Função principal para carregar e exibir casas
     async function carregarExibirCasas() {
         const republicasContainer = document.getElementById("republicas-container");
@@ -83,42 +147,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (loadingIndividuais) loadingIndividuais.style.display = 'block';
 
         try {
-            const todasAsCasas = await buscarCasas();
-            console.log("Total de casas encontradas antes do filtro:", todasAsCasas.length);
+            todasAsCasasCache = await buscarCasas();
+            console.log("Total de casas encontradas antes do filtro:", todasAsCasasCache.length);
 
             // *** FILTRO ADICIONADO AQUI para remover casas com status 'Ocupada' ***
-            const casasDisponiveis = todasAsCasas.filter(casa => casa.status !== 'Ocupada');
+            const casasDisponiveis = todasAsCasasCache.filter(casa => casa.status !== 'Ocupada');
             console.log("Total de casas disponíveis (não ocupadas):", casasDisponiveis.length);
 
             if (loadingRepublicas) loadingRepublicas.style.display = 'none';
             if (loadingIndividuais) loadingIndividuais.style.display = 'none';
 
-            let contRepublicas = 0;
-            let contIndividuais = 0;
-
-            // Itera sobre as casas DISPONÍVEIS
-            casasDisponiveis.forEach(casa => {
-                const card = criarCardCasa(casa);
-                
-                if (casa.tipo === "República Universitária") {
-                    republicasContainer.appendChild(card);
-                    contRepublicas++;
-                } else if (casa.tipo === "Solitário") {
-                    individuaisContainer.appendChild(card);
-                    contIndividuais++;
-                } else {
-                    console.warn(`Casa ID ${casa.idCasa} (Disponível) com tipo inesperado:`, casa.tipo);
-                }
-            });
-
-            console.log(`Casas disponíveis exibidas: ${contRepublicas} repúblicas, ${contIndividuais} individuais`);
-
-            if (contRepublicas === 0) {
-                republicasContainer.innerHTML = '<p class="no-results">Nenhuma república universitária disponível encontrada.</p>';
-            }
-            if (contIndividuais === 0) {
-                individuaisContainer.innerHTML = '<p class="no-results">Nenhuma acomodação para solitários disponível encontrada.</p>';
-            }
+            atualizarExibicaoCasas(casasDisponiveis);
 
         } catch (error) {
             console.error("Erro final ao carregar e exibir casas:", error);

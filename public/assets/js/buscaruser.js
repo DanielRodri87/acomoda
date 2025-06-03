@@ -39,6 +39,20 @@ function updateUserInterface(user) {
     if (document.getElementById('user-email')) {
         document.getElementById('user-email').textContent = user.email || "email@exemplo.com";
     }
+    if (document.getElementById('overlay-user-email')) {
+        document.getElementById('overlay-user-email').textContent = user.email || "email@exemplo.com";
+    }
+    
+    // Atualiza o link "Seu Perfil" com base no tipo de usuário
+    const perfilLink = document.getElementById('profile-link');
+    if (perfilLink && user.tipo) {
+        // Define o link correto com base no tipo de usuário
+        if (user.tipo.toLowerCase() === 'inquilino') {
+            perfilLink.href = "../pages/renter.html";
+        } else if (user.tipo.toLowerCase() === 'locador') {
+            perfilLink.href = "../pages/locator.html";
+        }
+    }
     
     // Elemento do nome completo na página de perfil do locador
     if (document.getElementById('user-full-name')) {

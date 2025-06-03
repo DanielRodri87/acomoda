@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Imóvel - Acomoda</title>
+  <link rel="stylesheet" href="../assets/css/components/navbar.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Urbanist', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      padding: 20px;
+    }
+    
+
+    .container {
+      max-width: 1200px;
+      margin: 80px auto 30px;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .form-container {
+      background-color: #f0f0f0;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .form-section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      color: #4a7c59;
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .file-input-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      border: 2px dashed #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .file-input-container img {
+      max-width: 200px;
+      max-height: 200px;
+      display: none;
+    }
+
+    .file-input {
+      margin-top: 10px;
+    }
+
+    .file-input-label {
+      background-color: #1c6155;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .fotos-counter {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+    }
+    
+    .preview-images {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .preview-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      object-fit: cover;
+      position: relative;
+    }
+    
+    .preview-image-container {
+      position: relative;
+    }
+    
+    .preview-remove-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .submit-btn {
+      background-color: #1c6155;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+      transition: background-color 0.3s;
+    }
+
+    .submit-btn:hover {
+      background-color: #154a40;
+    }
+
+    .required:after {
+      content: " *";
+      color: #e74c3c;
+    }
+
+    .form-group.half {
+      width: 48%;
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 2%;
+    }
+
+    .form-group.half:nth-child(even) {
+      margin-right: 0;
+    }
+
+    @media (max-width: 768px) {
+      .form-group.half {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h1>Cadastrar Novo Imóvel</h1>
+    <p class="subtitle">Preencha os detalhes do imóvel que deseja cadastrar na plataforma.</p>
+
+    <form id="cadastrarCasaForm">
+      <div class="form-container">
+        <div class="form-section">
+          <h2 class="section-title">Informações Básicas</h2>
+          
+          <div class="form-group">
+            <label for="nome" class="required">Nome do imóvel</label>
+            <input type="text" id="nome" name="nome" required placeholder="Ex: Apartamento 302 Residencial Primavera">
+          </div>
+          
+          <div class="form-group">
+            <label for="valor" class="required">Valor do aluguel (R$)</label>
+            <input type="number" id="valor" name="valor" step="0.01" min="0" required placeholder="Ex: 800.00">
+          </div>
+
+          <div class="form-group half">
+            <label for="status" class="required">Status</label>
+            <select id="status" name="status" required>
+              <option value="Desocupada">Desocupada</option>
+              <option value="Ocupada">Ocupada</option>
+            </select>
+          </div>
+
+          <div class="form-group half">
+            <label for="tipo" class="required">Tipo</label>
+            <select id="tipo" name="tipo" required>
+              <option value="Solitário">Solitário</option>
+              <option value="República Universitária">República Universitária</option>
+            </select>
+          </div>
+          
+          <!-- Campo oculto para armazenar o ID do usuário logado -->
+          <input type="hidden" id="userProprietario" name="userProprietario">
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Descrição e Detalhes</h2>
+          
+          <div class="form-group">
+            <label for="descricao" class="required">Descrição completa</label>
+            <textarea id="descricao" name="descricao" required placeholder="Descreva detalhes como número de quartos, banheiros, área, localização, etc."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="observacao">Observações adicionais</label>
+            <textarea id="observacao" name="observacao" placeholder="Informações adicionais como regras da casa, contas inclusas, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Imagens</h2>
+          
+          <div class="form-group">
+            <label for="fotoPrincipal" class="required">Foto principal</label>
+            <div class="file-input-container">
+              <img id="fotoPrincipalPreview" alt="Preview da foto principal">
+              <input type="file" id="fotoPrincipal" name="fotoPrincipal" class="file-input" accept="image/*" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="fotosAdicionais">Fotos adicionais</label>
+            <div class="file-input-container">
+              <div class="preview-images" id="fotosPreview"></div>
+              <div id="fotosCounter" class="fotos-counter">0 de 5 fotos selecionadas</div>
+              <input type="file" id="fotosAdicionais" name="fotosAdicionais" class="file-input" accept="image/*" multiple>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Cadastrar Imóvel</button>
+    </form>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Visualização prévia da foto principal
+    document.getElementById('fotoPrincipal').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const preview = document.getElementById('fotoPrincipalPreview');
+          preview.src = event.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Array para armazenar as fotos que estão atualmente no preview
+    let previewedImages = [];
+    let nextImageIndex = 0;
+
+    // Visualização prévia das fotos adicionais
+    document.getElementById('fotosAdicionais').addEventListener('change', function(e) {
+      const files = e.target.files;
+      const preview = document.getElementById('fotosPreview');
+      const counter = document.getElementById('fotosCounter');
+      
+      // Não limpa mais o preview - agora adicionamos às imagens existentes
+      
+      // Verificar quantas imagens ainda podemos adicionar
+      const currentCount = previewedImages.length;
+      const remainingSlots = 5 - currentCount;
+      
+      if (remainingSlots <= 0) {
+        alert('Você já atingiu o limite de 5 fotos. Remova algumas para adicionar novas.');
+        return;
+      }
+      
+      // Limitar às vagas restantes
+      const maxFilesToAdd = Math.min(files.length, remainingSlots);
+      
+      for (let i = 0; i < maxFilesToAdd; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+          const imgIndex = nextImageIndex++;
+          previewedImages.push({
+            index: imgIndex,
+            file: file,
+            dataUrl: event.target.result
+          });
+          
+          const container = document.createElement('div');
+          container.className = 'preview-image-container';
+          container.dataset.index = imgIndex;
+          
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          img.className = 'preview-image';
+          img.dataset.index = imgIndex;
+          
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'preview-remove-btn';
+          removeBtn.innerHTML = '&times;';
+          removeBtn.title = 'Remover esta imagem';
+          removeBtn.dataset.index = imgIndex;
+          removeBtn.onclick = function(e) {
+            e.preventDefault();
+            // Remover do DOM
+            container.remove();
+            
+            // Remover do array de imagens
+            const index = parseInt(this.dataset.index);
+            previewedImages = previewedImages.filter(img => img.index !== index);
+            
+            // Atualizar o contador
+            counter.textContent = `${previewedImages.length} de 5 fotos selecionadas`;
+          };
+          
+          container.appendChild(img);
+          container.appendChild(removeBtn);
+          preview.appendChild(container);
+          
+          // Atualizar o contador após adicionar a imagem
+          counter.textContent = `${previewedImages.length} de 5 fotos selecionadas`;
+        };
+        
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Obter o ID do usuário logado e preencher o campo oculto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar se o usuário está logado
+      const userData = localStorage.getItem('userData');
+      if (!userData) {
+        // Redirecionar para a página de login se não estiver logado
+        window.location.href = '/';
+        return;
+      }
+
+      try {
+        // Parsear dados do usuário do localStorage
+        const user = JSON.parse(userData);
+        
+        // Preencher o campo oculto com o ID do usuário
+        document.getElementById('userProprietario').value = user.user || '';
+        
+        console.log('Usuário proprietário definido automaticamente:', user.user);
+      } catch (error) {
+        console.error('Erro ao processar dados do usuário:', error);
+        alert('Erro ao identificar usuário. Por favor, faça login novamente.');
+        window.location.href = '/';
+      }
+    });
+
+    // Envio do formulário
+    document.getElementById('cadastrarCasaForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Verificar se o userProprietario está preenchido
+      const userProprietario = document.getElementById('userProprietario').value;
+      if (!userProprietario) {
+        alert('Erro: Impossível identificar o proprietário. Por favor, faça login novamente.');
+        return;
+      }
+      
+      // Capturar os valores do formulário
+      const formData = new FormData();
+      formData.append('nome', document.getElementById('nome').value);
+      formData.append('valor', document.getElementById('valor').value);
+      formData.append('userProprietario', userProprietario);
+      formData.append('descricao', document.getElementById('descricao').value);
+      formData.append('observacao', document.getElementById('observacao').value);
+      formData.append('status', document.getElementById('status').value);
+      formData.append('tipo', document.getElementById('tipo').value);
+      
+      // Adicionar a foto principal
+      const fotoPrincipal = document.getElementById('fotoPrincipal').files[0];
+      formData.append('fotoPrincipal', fotoPrincipal);
+      
+      // Adicionar as fotos adicionais
+      if (previewedImages.length > 0) {
+        console.log(`Enviando ${previewedImages.length} fotos adicionais`);
+        
+        // Adicionar cada imagem do nosso array controlado
+        previewedImages.forEach(imgData => {
+          formData.append('fotosAdicionais', imgData.file);
+        });
+      }
+      
+      try {
+        // Exibir mensagem de carregamento
+        const submitBtn = document.querySelector('.submit-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Enviando...';
+        submitBtn.disabled = true;
+        
+        // Fazer a requisição para a API
+        const response = await fetch('/api/casas', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          const errorMessage = errorData?.message || 'Erro ao cadastrar imóvel. Tente novamente.';
+          alert(errorMessage);
+        } else {
+          const resultado = await response.json();
+          console.log('Cadastro realizado com sucesso:', resultado);
+          alert('Imóvel cadastrado com sucesso!');
+          
+          // Após cadastrar com sucesso, redirecionar para a página principal
+          window.location.href = '/pages/main_screen.html';
+        }
+        
+      } catch (error) {
+        console.error('Erro ao cadastrar imóvel:', error);
+        alert(`Erro ao cadastrar imóvel: ${error.message || 'Erro desconhecido'}`);
+      } finally {
+        // Restaurar o texto original do botão
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

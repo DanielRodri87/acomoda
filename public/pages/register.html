@@ -12,8 +12,9 @@
         <div class="container">
           <div class="left-panel">
             <div class="profile-pic">
-              <img src="../assets/images/register/profile_image.png" alt="Foto de perfil" />
-              <img src="../assets/images/register/camera.png" class="camera-icon" alt="Ícone da câmera" />
+              <img src="../assets/images/register/profile_image.png" alt="Foto de perfil" id="profileImage" />
+              <img src="../assets/images/register/camera.png" class="camera-icon" alt="Ícone da câmera" id="cameraButton" />
+              <input type="file" id="imageInput" accept="image/*" style="display: none;" />
             </div>
             <h1>Seja Bem-Vindo!</h1>
             <p>Preencha os campos com os seu dados</p>
@@ -23,7 +24,7 @@
             <img src="../assets/images/register/back.png" class="background-img" alt="Fundo decorativo" />
             <img src="../assets/images/register/close.png" class="close-btn" alt="Fechar" />
       
-            <form>
+            <form id="registerForm">
               <div class="form-row">
                 <div class="form-group">
                   <label><img src="../assets/images/register/user.png" alt="User" /> User</label>
@@ -81,6 +82,7 @@
             </form>
           </div>
         </div>
+        <script src="../assets/js/database.js"></script>
         <script src="../assets/js/main.js"></script>
     </body>
 </html>

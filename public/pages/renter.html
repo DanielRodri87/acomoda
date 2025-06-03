@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seu Perfil - Acomoda</title>
+  <link rel="stylesheet" href="../assets/css/renter.css" />
+  <link rel="stylesheet" href="../assets/css/components/navbar.css">
+</head>
+<body>
+    <div id="navbar"></div>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <nav>
+              <ul>
+                <li class="active">
+                  <img src="../assets/images/renter/perfil.png" alt="Perfil" class="menu-icon" />
+                  Seu Perfil
+                </li>
+                <li>
+                  <img src="../assets/images/renter/casas.png" alt="Seus Imóveis" class="menu-icon" />
+                  Seus Imóveis
+                </li>
+                <li>
+                  <img src="../assets/images/renter/fav.png" alt="Favoritos" class="menu-icon" />
+                  Favoritos
+                </li>
+                <li>
+                  <img src="../assets/images/renter/notificoes.png" alt="Notificações" class="menu-icon" />
+                  Notificações
+                </li>
+                <li>
+                  <img src="../assets/images/renter/config.png" alt="Configurações" class="menu-icon" />
+                  Configurações e privacidade
+                </li>
+              </ul>
+            </nav>
+        </aside>
+
+        <div class="content-container">
+            <div class="main-content">
+              <section class="profile">
+                <h1>Seu Perfil</h1>
+                <p>Administre suas informações pessoais e de segurança.</p>
+
+                <div class="profile-sections">
+                  <div class="profile-box">
+                    <h2 class="section-title orange">Locatário</h2>
+                    <div class="user-info">
+                      <div class="avatar-container">
+                        <img src="../assets/images/about/foto_luis.png" class="avatar" alt="Foto do usuário" />
+                        <button class="edit-photo-btn" type="button">
+                          <img src="../assets/images/register/camera.png" alt="Editar foto" />
+                        </button>
+                      </div>
+                      <div class="user-details">
+                        <h3>Luis Gustavo</h3>
+                        <p class="phone">+55 8999423-4516</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="profile-box">
+                    <h2 class="section-title green">Informações gerais</h2>
+                    <form>
+                      <input type="text" value="Luis" placeholder="Primeiro nome"/>
+                      <input type="text" value="Gustavo" placeholder="Segundo nome"/>
+                      <button type="button">Alterar</button>
+                    </form>
+                  </div>
+
+                  <div class="profile-box">
+                    <h2 class="section-title green">Segurança</h2>
+                    <form>
+                        <div class="form-field">
+                            <input type="email" value="Luis.gustavo@ufpi.edu.br" placeholder="E-mail" />
+                        </div>
+                        <div class="form-field">
+                            <input type="text" value="+55 8999423-4516" placeholder="Telefone" />
+                        </div>
+                        <button type="button">Alterar Contatos</button>
+                        <div class="form-field">
+                            <input type="password" value="********************" placeholder="Senha" />
+                        </div>
+                        <button type="button">Alterar Senha</button>
+                    </form>
+                  </div>
+
+                  <div class="profile-box">
+                    <h2 class="section-title green">Último Imóvel visto</h2>
+                    <div class="imovel">
+                        <div class="image-container">
+                            <img src="../assets/images/renter/casa.png" alt="Apartamento Tia Cecilia" />
+                            <div class="image-info">
+                                <h4>Apartamento 21 Tia Cecilia</h4>
+                                <p><strong>R$815</strong> - <span class="rating">4.8 ★</span></p>
+                            </div>
+                        </div>
+                        <div class="descricao">
+                            <p><strong>1 quartos</strong>, com 2 em cada</p>
+                            <p>3 banheiros</p>
+                            <small>
+                                Próximo à UFPI<br/>
+                                Contas acessíveis<br/>
+                                Água Inclusa
+                            </small>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

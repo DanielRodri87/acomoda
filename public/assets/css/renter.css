@@ -1,0 +1,328 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  /* Navbar */
+  #navbar {
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alterado para alinhar à esquerda */
+    padding: 0; /* Removido padding */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  /* Container geral com navbar e conteúdo abaixo */
+  .container {
+    display: flex;
+    margin-top: 10px; /* altura do navbar */
+    height: calc(100vh - 60px);
+  }
+
+  .wrapper {
+    display: flex;
+    margin-top: 10px; 
+    min-height: calc(100vh - 60px);
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 30%;
+    max-width: 300px;
+    padding: 1.5rem 1rem;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    margin: 10px;
+    height: 660px;
+  }
+  
+  .sidebar .logo img {
+    width: 120px;
+    margin: 0 auto 1.5rem auto;
+    display: block;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar nav ul li {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #4a7c59;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .sidebar nav ul li.active,
+  .sidebar nav ul li:hover {
+    background-color: #d9eae0;
+    font-weight: bold;
+  }
+
+  .content-container {
+    width: 70%;
+    padding: 10px;
+  }
+  
+  /* Conteúdo principal */
+  .main-content {
+    width: 100%;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  
+  /* Títulos */
+  .profile h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile p {
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  
+  /* Seções do perfil */
+  .profile-sections {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  /* Caixas */
+  .profile-box {
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section-title.orange {
+    color: #f28b40;
+    margin-bottom: 1rem;
+  }
+  
+  .section-title.green {
+    color: #4a7c59;
+    margin-bottom: 1rem;
+  }
+  
+  /* Informações do usuário */
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .user-info .avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 3px solid white;
+  }
+  
+  .user-info h3 {
+    margin-bottom: 5px;
+    color: #1c6155;
+    font-size: 1.25rem;
+  }
+  
+  .user-info .phone {
+    color: #1c6155;
+    font-weight: bold;
+  }
+
+  .avatar-container {
+    position: relative;
+    margin-right: 1.5rem;
+  }
+
+  .edit-photo-btn {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .edit-photo-btn img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .user-details h3 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    color: #1c6155;
+  }
+
+  .user-details .phone {
+    font-size: 1.4rem;
+  }
+  
+  /* Formulários e botões */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    display: block;
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #1c6155;
+    border: 1px solid #1c6155;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #e2f0ea;
+  }
+  
+  /* Último imóvel */
+  .imovel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+  }
+
+  .imovel .image-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .imovel img {
+    width: 300px;
+    height: auto;
+    border-radius: 12px;
+    border: 2px solid #1c6155;
+  }
+
+  .image-info {
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .image-info h4 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .image-info p {
+    font-size: 1.3rem;
+  }
+  
+  .descricao p,
+  .descricao small {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+  }
+  
+  .descricao h4 {
+    margin-top: 0.7rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .descricao .rating {
+    color: #f4b400;
+    font-weight: bold;
+  }
+
+  .descricao p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .descricao small {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .descricao h4 {
+    font-size: 1.4rem;
+    margin: 1rem 0;
+  }
+
+  .menu-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  .profile-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profile-box .form-field {
+    margin-bottom: 5px;
+}
+
+.profile-box form label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-box form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-bottom: 15px;
+}
+
+.profile-box form input:disabled {
+    background-color: #f8f8f8;
+    color: #666;
+}
+
+.profile-box form button {
+    align-self: flex-start;
+    margin-bottom: 5px;
+}

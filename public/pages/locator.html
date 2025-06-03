@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seu Perfil - Acomoda</title>
+  <link rel="stylesheet" href="../assets/css/locator.css" />
+  <link rel="stylesheet" href="../assets/css/components/navbar.css">
+</head>
+<body>
+    <div id="navbar"></div>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <nav>
+              <ul>
+                <li class="active">
+                  <img src="../assets/images/renter/perfil.png" alt="Perfil" class="menu-icon" />
+                  Seu Perfil
+                </li>
+                <li>
+                  <img src="../assets/images/renter/casas.png" alt="Seus Imóveis" class="menu-icon" />
+                  Seus Imóveis
+                </li>
+                <li>
+                  <img src="../assets/images/renter/fav.png" alt="Favoritos" class="menu-icon" />
+                  Favoritos
+                </li>
+                <li>
+                  <img src="../assets/images/renter/notificoes.png" alt="Notificações" class="menu-icon" />
+                  Notificações
+                </li>
+                <li>
+                  <img src="../assets/images/renter/config.png" alt="Configurações" class="menu-icon" />
+                  Configurações e privacidade
+                </li>
+              </ul>
+            </nav>
+        </aside>
+
+        <div class="content-container">
+            <div class="main-content">
+              <section class="profile">
+                <h1>Seu Perfil</h1>
+                <p>Administre suas informações pessoais e de segurança.</p>
+
+                <div class="profile-sections">
+                  <div class="profile-box">
+                    <h2 class="section-title orange">Locador</h2>
+                    <div class="user-info">
+                      <div class="avatar-container">
+                        <img src="../assets/images/about/foto_luis.png" class="avatar profile-user-image" id="user-profile-img" alt="Foto do usuário" />
+                        <button class="edit-photo-btn" type="button">
+                          <img src="../assets/images/register/camera.png" alt="Editar foto" />
+                        </button>
+                      </div>
+                      <div class="user-details">
+                        <h3 id="user-full-name">Carregando...</h3>
+                        <p class="phone" id="info-phone">Carregando...</p>
+                        <p hidden id="info-email">Carregando...</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="profile-box">
+                    <h2 class="section-title green">Informações gerais</h2>
+                    <form>
+                      <input type="text" id="user-first-name-input" placeholder="Primeiro nome"/>
+                      <input type="text" id="user-last-name-input" placeholder="Segundo nome"/>
+                      <button type="button">Alterar</button>
+                    </form>
+                  </div>
+
+                  <div class="profile-box">
+                    <h2 class="section-title green">Segurança</h2>
+                    <form>
+                        <div class="form-field">
+                            <input type="email" id="user-email-input" placeholder="E-mail" />
+                        </div>
+                        <div class="form-field">
+                            <input type="text" id="user-phone-input" placeholder="Telefone" />
+                        </div>
+                        <button type="button">Alterar Contatos</button>
+                        <div class="form-field">
+                            <input type="password" value="********************" placeholder="Senha" />
+                        </div>
+                        <button type="button">Alterar Senha</button>
+                    </form>
+                  </div>
+
+                  <div class="profile-box">
+                    <h2 class="section-title green">Imóveis</h2>
+                    <span>Administre seus imóveis e cadastre seus novos imóveis.</span>
+                    <div class="imovel-buttons">
+                      <a href="">Ver imóveis</a>
+                      <a href="cadastrar-casa.html" class="imovel-buttons">Cadastrar imóvel</a>
+                    </div>
+                  </div>
+                  
+                </div>
+              </section>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/buscaruser.js"></script>
+    <script>
+      // Script para preencher os campos do formulário com os dados do usuário
+      document.addEventListener("DOMContentLoaded", function() {
+        // Carregar dados diretamente do localStorage
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+          try {
+            const user = JSON.parse(userData);
+            
+            // Preencher campos do formulário
+            if (document.getElementById("user-first-name-input")) {
+              document.getElementById("user-first-name-input").value = user.primeiro_nome || "";
+            }
+            
+            if (document.getElementById("user-last-name-input")) {
+              document.getElementById("user-last-name-input").value = user.segundo_nome || "";
+            }
+            
+            if (document.getElementById("user-email-input")) {
+              document.getElementById("user-email-input").value = user.email || "";
+            }
+            
+            if (document.getElementById("user-phone-input")) {
+              document.getElementById("user-phone-input").value = user.numero || "";
+            }
+          } catch (error) {
+            console.error("Erro ao processar dados do usuário:", error);
+          }
+        }
+      });
+    </script>
+</body>
+</html>

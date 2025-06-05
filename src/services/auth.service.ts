@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './database/user/user.entity';
+import { User } from '../database/user/user.entity';
 import { UserService } from './user.service';
-import { EmailService } from './email/email.service';
+import { EmailService } from '../email/email.service';
 import * as bcrypt from 'bcrypt';
 
 interface ResetCode {

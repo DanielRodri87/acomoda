@@ -89,14 +89,14 @@ if (form) {
       });
       
       if (res.ok) {
-        alert('Cadastro realizado com sucesso!');
+        // alert('Cadastro realizado com sucesso!');
         window.location.href = '../index.html';
       } else {
-        alert('Erro ao cadastrar usuário.');
+        // alert('Erro ao cadastrar usuário.');
       }
     } catch (err) {
       console.error('Erro:', err);
-      alert('Erro de conexão com o servidor.');
+      // alert('Erro de conexão com o servidor.');
     }
   });
 }
@@ -115,13 +115,13 @@ document.addEventListener('DOMContentLoaded', function () {
           body: JSON.stringify({ user, senha })
         });
         if (res.ok) {
-          alert('Login realizado com sucesso!');
+          // alert('Login realizado com sucesso!');
           window.location.href = 'pages/main_screen.html';
         } else {
-          alert('Usuário ou senha inválidos!');
+          // alert('Usuário ou senha inválidos!');
         }
       } catch (err) {
-        alert('Erro de conexão com o servidor.');
+        // alert('Erro de conexão com o servidor.');
       }
     });
   }

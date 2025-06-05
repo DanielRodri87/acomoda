@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Casa, FotoCasa } from './database/casa/casa.entity';
-import { User } from './database/user/user.entity';
+import { Casa, FotoCasa } from '../database/casa/casa.entity';
+import { User } from '../database/user/user.entity';
 
 @Injectable()
 export class CasaService {

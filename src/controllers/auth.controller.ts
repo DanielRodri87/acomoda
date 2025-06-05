@@ -1,5 +1,5 @@
 import { Controller, Post, Body, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Controller('api/auth')
 export class AuthController {

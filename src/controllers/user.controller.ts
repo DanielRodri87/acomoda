@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Param, NotFoundException } from '@nestjs/common';
-import { UserService } from './user.service';
-import { User } from './database/user/user.entity';
+import { UserService } from '../services/user.service';
+import { User } from '../database/user/user.entity';
 
 @Controller('users')
 export class UserController {

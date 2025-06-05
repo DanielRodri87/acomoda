@@ -48,14 +48,15 @@
                     <h2 class="section-title orange">Locatário</h2>
                     <div class="user-info">
                       <div class="avatar-container">
-                        <img src="../assets/images/about/foto_luis.png" class="avatar" alt="Foto do usuário" />
+                        <img src="../assets/images/about/foto_luis.png" class="avatar profile-user-image" id="user-profile-img" alt="Foto do usuário" />
                         <button class="edit-photo-btn" type="button">
                           <img src="../assets/images/register/camera.png" alt="Editar foto" />
                         </button>
                       </div>
                       <div class="user-details">
-                        <h3>Luis Gustavo</h3>
-                        <p class="phone">+55 8999423-4516</p>
+                        <h3 id="user-full-name">Carregando...</h3>
+                        <p class="phone" id="info-phone">Carregando...</p>
+                        <p hidden id="info-email">Carregando...</p>
                       </div>
                     </div>
                   </div>
@@ -63,8 +64,8 @@
                   <div class="profile-box">
                     <h2 class="section-title green">Informações gerais</h2>
                     <form>
-                      <input type="text" value="Luis" placeholder="Primeiro nome"/>
-                      <input type="text" value="Gustavo" placeholder="Segundo nome"/>
+                      <input type="text" id="user-first-name-input" placeholder="Primeiro nome"/>
+                      <input type="text" id="user-last-name-input" placeholder="Segundo nome"/>
                       <button type="button">Alterar</button>
                     </form>
                   </div>
@@ -73,10 +74,10 @@
                     <h2 class="section-title green">Segurança</h2>
                     <form>
                         <div class="form-field">
-                            <input type="email" value="Luis.gustavo@ufpi.edu.br" placeholder="E-mail" />
+                            <input type="email" id="user-email-input" placeholder="E-mail" />
                         </div>
                         <div class="form-field">
-                            <input type="text" value="+55 8999423-4516" placeholder="Telefone" />
+                            <input type="text" id="user-phone-input" placeholder="Telefone" />
                         </div>
                         <button type="button">Alterar Contatos</button>
                         <div class="form-field">
@@ -113,5 +114,37 @@
         </div>
     </div>
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/buscaruser.js"></script>
+    <script>
+      // Script para preencher os campos do formulário com os dados do usuário
+      document.addEventListener("DOMContentLoaded", function() {
+        // Carregar dados diretamente do localStorage
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+          try {
+            const user = JSON.parse(userData);
+            
+            // Preencher campos do formulário
+            if (document.getElementById("user-first-name-input")) {
+              document.getElementById("user-first-name-input").value = user.primeiro_nome || "";
+            }
+            
+            if (document.getElementById("user-last-name-input")) {
+              document.getElementById("user-last-name-input").value = user.segundo_nome || "";
+            }
+            
+            if (document.getElementById("user-email-input")) {
+              document.getElementById("user-email-input").value = user.email || "";
+            }
+            
+            if (document.getElementById("user-phone-input")) {
+              document.getElementById("user-phone-input").value = user.numero || "";
+            }
+          } catch (error) {
+            console.error("Erro ao processar dados do usuário:", error);
+          }
+        }
+      });
+    </script>
 </body>
 </html>

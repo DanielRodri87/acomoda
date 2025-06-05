@@ -294,19 +294,22 @@
 
   .imovel-buttons a {
     flex: 1;
-    padding: 0.8rem;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
-    border-radius: 8px;
-    border: 2px solid #1c6155;
+    border-radius: 5px;
+    border: 1px solid #1c6155;
     color: #1c6155;
     background-color: white;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
   }
 
   .imovel-buttons a:hover {
-    background-color: #d9eae0;
+    background-color: #e2f0ea;
   }
 
   .menu-icon {
